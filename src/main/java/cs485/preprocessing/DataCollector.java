@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cs485.preprocessing;
 
@@ -27,10 +27,12 @@ import com.google.gson.stream.JsonReader;
  *
  */
 public class DataCollector {
+
 	private Map<String, List<Visit>> dowloadedData = new HashMap<>();
-	private String[] links; 
+	private String[] links;
+
 	/**
-	 * 
+	 * @param links
 	 */
 	public DataCollector(String[] links) {
 		// TODO Auto-generated constructor stub
@@ -41,11 +43,15 @@ public class DataCollector {
 		this.links = links;
 	}
 
-	public void fetchSaveData() throws IOException {
+	/**
+	 * @return
+	 * @throws IOException
+	 */
+	public Map<String, List<Visit>> fetchSaveData() throws IOException {
 		System.out.println("Starting Data Fetch...");
 		for (Map.Entry<String, List<Visit>> mapEntry : dowloadedData.entrySet()) {
 			String key = mapEntry.getKey();
-			System.out.println(key.toString() + " is the first link");			
+			System.out.println(key.toString() + " is the first link");
 			URL url = new URL(key);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
@@ -53,7 +59,7 @@ public class DataCollector {
 			ZipInputStream zipIn = new ZipInputStream(in);
 			ZipEntry entry = zipIn.getNextEntry();
 			System.out.println("Downloaded Zipped Folder...");
-			
+
 			Gson gson = new Gson();
 			while (entry != null) {
 				System.out.print("Unzipping and peaking folder --- ");
@@ -67,28 +73,56 @@ public class DataCollector {
 					System.out.println("Found the results element...");
 					List<Visit> visit = new ArrayList<>();
 					JsonArray jArray = eJsonElement.getAsJsonArray();
-					for (int i = 0; i < jArray.size(); i+=2) {
+					for (int i = 0; i < jArray.size(); i += 2) {
 						visit.add(gson.fromJson(jArray.get(i), Visit.class));
 					}
 					dowloadedData.put(key, visit);
-					System.out.println("Added and put visit list into hashmap. Will continue to next link if one exisits...");
-					
+					System.out.println(
+							"Added and put visit list into hashmap. Will continue to next link if one exisits...");
+
 				}
 				zipIn.closeEntry();
 				entry = zipIn.getNextEntry();
 
 			}
-			
-			
-			
 		}
-		System.out.println("Finished with all the links. Printing first element content of hashmap: " + dowloadedData.get(links[0]).get(0).toString());
+		System.out.println("Finished with all the links. Printing first element content of hashmap: "
+				+ dowloadedData.get(links[0]).get(0).toString());
+		return dowloadedData;
 	}
-	
-	public static void main (String args[]) {
+
+	/**
+	 * @return
+	 */
+	public Map<String, List<Visit>> getDowloadedData() {
+		return dowloadedData;
+	}
+
+	/**
+	 * @param dowloadedData
+	 */
+	public void setDowloadedData(Map<String, List<Visit>> dowloadedData) {
+		this.dowloadedData = dowloadedData;
+	}
+
+	/**
+	 * @return
+	 */
+	public String[] getLinks() {
+		return links;
+	}
+
+	/**
+	 * @param links
+	 */
+	public void setLinks(String[] links) {
+		this.links = links;
+	}
+
+	public static void main(String args[]) {
 		DataCollector dataCollector = new DataCollector(new String[] {
 				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
-				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip"});
+				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
 		try {
 			dataCollector.fetchSaveData();
 		} catch (IOException e) {
@@ -96,7 +130,5 @@ public class DataCollector {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }

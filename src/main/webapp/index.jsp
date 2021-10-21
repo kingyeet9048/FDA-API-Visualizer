@@ -8,7 +8,7 @@
 </head>
 <body>
 <%@ page import="java.io.*" %> 
-<%@ page import="" %>
+<%@ page import="cs485.preprocessing.*" %>
 
 <form  action="index.jsp" method="get">
 
@@ -16,7 +16,15 @@ Favorite Sports: <input id="sports" name="sports" type="text"/><br/>
 <input type="submit" Value="Submit" ></input>
 </form>
 <%
-
+	DataCollector dataCollector = new DataCollector(new String[] {
+			"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
+			"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
+	try {
+		dataCollector.fetchSaveData();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 %>
 
 </body>
