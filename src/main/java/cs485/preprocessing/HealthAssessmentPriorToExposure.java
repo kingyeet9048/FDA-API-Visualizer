@@ -1,6 +1,8 @@
 
 package cs485.preprocessing;
 
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -50,6 +52,23 @@ public class HealthAssessmentPriorToExposure {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(assessedBy, condition);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HealthAssessmentPriorToExposure other = (HealthAssessmentPriorToExposure) obj;
+		return Objects.equals(assessedBy, other.assessedBy) && Objects.equals(condition, other.condition);
 	}
 
 }

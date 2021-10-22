@@ -1,6 +1,8 @@
 
 package cs485.preprocessing;
 
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -110,6 +112,25 @@ public class Receiver {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(city, country, organization, postalCode, state, streetAddress);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Receiver other = (Receiver) obj;
+		return Objects.equals(city, other.city) && Objects.equals(country, other.country)
+				&& Objects.equals(organization, other.organization) && Objects.equals(postalCode, other.postalCode)
+				&& Objects.equals(state, other.state) && Objects.equals(streetAddress, other.streetAddress);
 	}
 
 }

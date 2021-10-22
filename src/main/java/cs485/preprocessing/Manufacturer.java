@@ -1,6 +1,8 @@
 
 package cs485.preprocessing;
 
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -50,6 +52,23 @@ public class Manufacturer {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, registrationNumber);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Manufacturer other = (Manufacturer) obj;
+		return Objects.equals(name, other.name) && Objects.equals(registrationNumber, other.registrationNumber);
 	}
 
 }

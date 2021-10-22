@@ -1,6 +1,8 @@
 
 package cs485.preprocessing;
 
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -80,6 +82,24 @@ public class Dose {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(denominator, denominatorUnit, numerator, numeratorUnit);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dose other = (Dose) obj;
+		return Objects.equals(denominator, other.denominator) && Objects.equals(denominatorUnit, other.denominatorUnit)
+				&& Objects.equals(numerator, other.numerator) && Objects.equals(numeratorUnit, other.numeratorUnit);
 	}
 
 }

@@ -1,6 +1,8 @@
 
 package cs485.preprocessing;
 
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -110,6 +112,26 @@ public class Animal {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(age, femaleAnimalPhysiologicalStatus, gender, reproductiveStatus, species, weight);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Animal other = (Animal) obj;
+		return Objects.equals(age, other.age)
+				&& Objects.equals(femaleAnimalPhysiologicalStatus, other.femaleAnimalPhysiologicalStatus)
+				&& Objects.equals(gender, other.gender) && Objects.equals(reproductiveStatus, other.reproductiveStatus)
+				&& Objects.equals(species, other.species) && Objects.equals(weight, other.weight);
 	}
 
 }

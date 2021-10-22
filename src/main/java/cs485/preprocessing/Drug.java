@@ -2,6 +2,8 @@
 package cs485.preprocessing;
 
 import java.util.List;
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -216,6 +218,34 @@ public class Drug {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(activeIngredients, administeredBy, aeAbatedAfterStoppingDrug, atcVetCode, brandName,
+				dosageForm, firstExposureDate, lastExposureDate, lotExpiration, lotNumber, manufacturer, route,
+				usedAccordingToLabel);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Drug other = (Drug) obj;
+		return Objects.equals(activeIngredients, other.activeIngredients)
+				&& Objects.equals(administeredBy, other.administeredBy)
+				&& Objects.equals(aeAbatedAfterStoppingDrug, other.aeAbatedAfterStoppingDrug)
+				&& Objects.equals(atcVetCode, other.atcVetCode) && Objects.equals(brandName, other.brandName)
+				&& Objects.equals(dosageForm, other.dosageForm)
+				&& Objects.equals(firstExposureDate, other.firstExposureDate)
+				&& Objects.equals(lastExposureDate, other.lastExposureDate)
+				&& Objects.equals(lotExpiration, other.lotExpiration) && Objects.equals(lotNumber, other.lotNumber)
+				&& Objects.equals(manufacturer, other.manufacturer) && Objects.equals(route, other.route)
+				&& Objects.equals(usedAccordingToLabel, other.usedAccordingToLabel);
 	}
 
 }

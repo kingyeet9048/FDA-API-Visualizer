@@ -2,6 +2,8 @@
 package cs485.preprocessing;
 
 import java.util.List;
+import java.util.Objects;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -261,6 +263,36 @@ public class Visit {
 			sb.append(']');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(animal, drug, healthAssessmentPriorToExposure, numberOfAnimalsAffected,
+				numberOfAnimalsTreated, onsetDate, originalReceiveDate, outcome, primaryReporter, reaction, receiver,
+				reportId, seriousAe, treatedForAe, typeOfInformation, uniqueAerIdNumber);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Visit other = (Visit) obj;
+		return Objects.equals(animal, other.animal) && Objects.equals(drug, other.drug)
+				&& Objects.equals(healthAssessmentPriorToExposure, other.healthAssessmentPriorToExposure)
+				&& Objects.equals(numberOfAnimalsAffected, other.numberOfAnimalsAffected)
+				&& Objects.equals(numberOfAnimalsTreated, other.numberOfAnimalsTreated)
+				&& Objects.equals(onsetDate, other.onsetDate)
+				&& Objects.equals(originalReceiveDate, other.originalReceiveDate)
+				&& Objects.equals(outcome, other.outcome) && Objects.equals(primaryReporter, other.primaryReporter)
+				&& Objects.equals(reaction, other.reaction) && Objects.equals(receiver, other.receiver)
+				&& Objects.equals(reportId, other.reportId) && Objects.equals(seriousAe, other.seriousAe)
+				&& Objects.equals(treatedForAe, other.treatedForAe)
+				&& Objects.equals(typeOfInformation, other.typeOfInformation)
+				&& Objects.equals(uniqueAerIdNumber, other.uniqueAerIdNumber);
 	}
 
 }
