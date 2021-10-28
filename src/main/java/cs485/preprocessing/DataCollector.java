@@ -120,8 +120,6 @@ public class DataCollector {
 	}
 
 	public static void main(String args[]) {
-		// this is a change again
-		// another change
 		DataCollector dataCollector = new DataCollector(new String[] {
 				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
 				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
