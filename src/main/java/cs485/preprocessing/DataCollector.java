@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import org.eclipse.jdt.internal.compiler.ast.AND_AND_Expression;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -125,6 +128,61 @@ public class DataCollector {
 				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
 		try {
 			dataCollector.fetchSaveData();
+			Map<String, List<Visit>> allVisitsMap = dataCollector.getDowloadedData();
+			
+			// types of animals present in database
+			for (Map.Entry<String, List<Visit>> mapEntry : allVisitsMap.entrySet()) {
+				String key = mapEntry.getKey();
+				List<Visit> values = mapEntry.getValue();
+				Map<String, Integer> animalTypes = new TreeMap<>();
+				Map<String, Integer> brandNames = new TreeMap<>();
+				Map<String, Integer> outcomeTypes = new TreeMap<>();
+				System.err.printf("\n\nSummery For %s: \n", key);
+				
+				// all visits
+				for (Visit visit : values) {
+					// current vist
+					Animal currentAnimal = visit.getAnimal();
+					if (currentAnimal != null) {
+						int animalCount = animalTypes.getOrDefault(currentAnimal.getSpecies(), 0);
+						if (animalCount == 0) {
+							animalTypes.put(currentAnimal.getSpecies(), 1);
+						}
+						else {
+							animalTypes.put(currentAnimal.getSpecies(), animalCount + 1);
+						}
+					}
+					List<Drug> drugs = visit.getDrug();
+					if (drugs != null) {
+						for (Drug drug : drugs) {
+							int brandCount = brandNames.getOrDefault(drug.getBrandName(), 0);
+							if (brandCount == 0) {
+								brandNames.put(drug.getBrandName(), 1);
+							}
+							else {
+								brandNames.put(drug.getBrandName(), brandCount + 1);
+
+							}
+						}
+					}
+					List<Outcome> outcomes = visit.getOutcome();
+					if (outcomes != null) {
+						for (Outcome out : outcomes) {
+							int outcomeCount = outcomeTypes.getOrDefault(out.getMedicalStatus(), 0);
+							if (outcomeCount == 0) {
+								outcomeTypes.put(out.getMedicalStatus(), 1);
+							}
+							else {
+								outcomeTypes.put(out.getMedicalStatus(), outcomeCount + 1);
+							}
+						}
+					}
+				}
+				System.out.printf("Number of Records (Vets visits): \n%d\n", values.size());
+				System.out.printf("Animal Counts: \n%s\n", animalTypes.toString());
+				System.out.printf("Drug Brands: \n%s\n", brandNames.toString());
+				System.out.printf("Outcome Distribution: \n%s\n", outcomeTypes.toString());
+			}			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
