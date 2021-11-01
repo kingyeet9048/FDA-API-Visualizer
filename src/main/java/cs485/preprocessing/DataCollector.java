@@ -24,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 
 /**
@@ -77,8 +78,13 @@ public class DataCollector {
 					System.out.println("Found the results element...");
 					List<Visit> visit = new ArrayList<>();
 					JsonArray jArray = eJsonElement.getAsJsonArray();
-					for (int i = 0; i < jArray.size(); i += 2) {
-						visit.add(gson.fromJson(jArray.get(i), Visit.class));
+					for (int i = 0; i < jArray.size(); i += 1) {
+						try {
+							visit.add(gson.fromJson(jArray.get(i), Visit.class));
+
+						} catch (IllegalStateException | JsonSyntaxException e) {
+							continue;
+						}
 					}
 					dowloadedData.put(key, visit);
 					System.out.println(
@@ -140,6 +146,7 @@ public class DataCollector {
 				Map<String, Integer> outcomeTypes = new TreeMap<>();
 				Map<String, Integer> routes = new TreeMap<String, Integer>();
 				Map<String, Integer> numAffected = new TreeMap<>();
+				Map<String, Integer> organizationsMap = new TreeMap<>();
 				Map<String, Integer> healthMap = new TreeMap<>();
 				
 				System.err.printf("\n\nSummery For %s: \n", key);
@@ -219,6 +226,19 @@ public class DataCollector {
 
 						}
 					}
+					Receiver receiver = visit.getReceiver();
+					if (receiver != null) {
+						if (receiver.getOrganization() == null) {
+							continue;
+						}
+						int receiverCount = organizationsMap.getOrDefault(receiver.getOrganization(), 0);
+						if (receiverCount == 0) {
+							organizationsMap.put(receiver.getOrganization(), 1);
+						}
+						else {
+							organizationsMap.put(receiver.getOrganization(), receiverCount + 1);
+						}
+					}
 				}
 				System.out.printf("Number of Records (Vets visits): \n%d\n", values.size());
 				System.out.printf("Animal Counts: \n%s\n", animalTypes.toString());
@@ -227,6 +247,7 @@ public class DataCollector {
 				System.out.printf("Outcome Distribution: \n%s\n", outcomeTypes.toString());
 				System.out.printf("Number of Animals Affected in a visit at a time: \n%s\n", numAffected.toString());
 				System.out.printf("Health Assesment Prior to Exposure Distribution: \n%s\n", healthMap.toString());
+				System.out.printf("Organization Distribution: \n%s\n", organizationsMap.toString());
 			}			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
