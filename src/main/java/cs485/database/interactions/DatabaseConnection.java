@@ -21,7 +21,7 @@ public class DatabaseConnection{
 	public void newDatabaseConnection () {
 		try {
 			loadCredentials();
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			setConnection(DriverManager.getConnection(url, username, password));
 			
@@ -73,7 +73,14 @@ public class DatabaseConnection{
 	}
 	
 	public boolean loadDatabase (Map<String, Visit> visits) {
-		
+		// ingrediants 
+			// needs
+				// pk int
+				//active ingredients string
+				// dose string
+		// Drug
+			//needs
+				// indredien
 		return true;
 	}
 	
