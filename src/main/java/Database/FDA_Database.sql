@@ -107,7 +107,7 @@ create table Appointment_Outcome (
     );
 
 create table Animal_Outcome (
-	Apt_Out_iAnimald						varchar(20) not null,
+	Apt_Out_id						varchar(20) not null,
     A_id							varchar(20) not null,
     primary key (Apt_out_id, A_id),
     foreign key (`Apt_Out_id`) references Appointment_Outcome(`Apt_Out_id`) ON UPDATE CASCADE ON DELETE CASCADE,
