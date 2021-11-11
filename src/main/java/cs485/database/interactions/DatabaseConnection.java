@@ -5,8 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import cs485.preprocessing.DataCollector;
+import cs485.preprocessing.Drug;
 import cs485.preprocessing.Visit; 
 public class DatabaseConnection{
 
@@ -14,6 +18,7 @@ public class DatabaseConnection{
 	private Connection connection;
 	private String username;
 	private String password;
+	private PreparedStatement preparedStatement;
 
 	public DatabaseConnection() {
 	}
@@ -72,22 +77,49 @@ public class DatabaseConnection{
 		return false;
 	}
 	
-	public boolean loadDatabase (Map<String, Visit> visits) {
-		// ingrediants 
-			// needs
-				// pk int
-				//active ingredients string
-				// dose string
-		// Drug
-			//needs
-				// indredien
+	public boolean loadDatabase (Map<String, List<Visit>> map) {
+		String insertIngredientQuery = "INSERT INTO FDA_Database.ingredients VALUES (?, ?, ?)";
+		for (Map.Entry<String, List<Visit>> mapEntry : map.entrySet()) {
+			String key = mapEntry.getKey();
+			List<Visit> values = mapEntry.getValue();
+			Map<String, Integer> atcCodesMap = new HashMap<String, Integer>();
+			for (Visit visit : values) {
+				for (Drug drug : visit.getDrug()) {
+					if (drug.getAtcVetCode() == null) {
+						continue;
+					}
+					if (drug.getAtcVetCode().equals("QA02BC01")) {
+						System.out.println(drug.toString());
+					}
+					int current = atcCodesMap.getOrDefault(drug.getAtcVetCode(), 0);
+					if (current == 0) {
+						atcCodesMap.put(drug.getAtcVetCode(), 1);
+					}
+					else {
+						atcCodesMap.put(drug.getAtcVetCode(), atcCodesMap.get(drug.getAtcVetCode()) + 1);
+//						System.out.println(drug.toString());
+					}
+				}
+			}
+			System.out.println(atcCodesMap.toString());
+		}
 		return true;
 	}
 	
 	public static void main(String args[]) {
+		DataCollector dataCollector = new DataCollector(new String[] {
+				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
+				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
+		try {
+			dataCollector.fetchSaveData();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		DatabaseConnection connection = new DatabaseConnection();
 		connection.newDatabaseConnection();
 		System.out.println(connection.isConnectionAlive());
+		connection.loadDatabase(dataCollector.getDowloadedData());
 		connection.closeConnection();
 	}
 
