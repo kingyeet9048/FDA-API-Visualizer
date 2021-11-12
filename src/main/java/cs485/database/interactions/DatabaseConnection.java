@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
+
 import cs485.preprocessing.ActiveIngredient;
 import cs485.preprocessing.Animal;
 import cs485.preprocessing.DataCollector;
@@ -41,6 +43,8 @@ public class DatabaseConnection{
 	List<String> orgId = new LinkedList<>();
 	List<String> appointmentID = new LinkedList<>();
 	List<String> appointmentOutID = new LinkedList<>();
+	List<String> recordID = new LinkedList<>();
+
 	private List<String> addedOwnerID = new LinkedList<>();
 	private List<String> addedAnimalID = new LinkedList<>();
 	private List<String> addedVetID = new LinkedList<>();
@@ -333,7 +337,11 @@ public class DatabaseConnection{
 	public void addAnimalAsso () throws SQLException {
 		String insertAppAnimal = "INSERT INTO FDA_Database.Appointment_Animals VALUES(?, ?)";
 		String insertAnimalOut = "INSERT INTO FDA_Database.Animal_Outcome VALUES(?, ?)";
+		String insertRecordAnimal = "INSERT INTO FDA_Database.Animals_in_Records VALUES(?, ?)";
 
+		System.out.println("Adding Animal Associations...");
+		Map<String, String> recordAnimals = new HashMap<>();
+		
 		for (int i = 0; i < 100; i++) {
 			Random random = new Random();
 			String currentAnimal = addedAnimalID.get(random.nextInt(addedAnimalID.size()));
@@ -390,12 +398,43 @@ public class DatabaseConnection{
 				anApp.put(currentAnimal, appID);
 				anAppOut.put(currentAnimal, appOutID);
 			}
+			if (recordAnimals.getOrDefault(currentAnimal, null) != null) {
+				int randomRecord = random.nextInt(recordID.size());
+				String currentRecordID = recordID.get(randomRecord);
+				while (true) {
+					if (checkAnimal(recordAnimals, currentAnimal, currentRecordID)) {
+						randomRecord = random.nextInt(recordID.size());
+						currentRecordID = recordID.get(randomRecord);
+						continue;
+					}
+					else {
+						break;
+					}
+				}
+				preparedStatement = connection.prepareStatement(insertRecordAnimal);
+				preparedStatement.setString(1, currentRecordID);
+				preparedStatement.setString(2, currentAnimal);
+				preparedStatement.executeUpdate();
+				recordAnimals.put(currentAnimal, recordAnimals.get(currentAnimal) + " " + currentRecordID);
+			}
+			else {
+				int randomRecord = random.nextInt(recordID.size());
+				String currentRecordID = recordID.get(randomRecord);
+				preparedStatement = connection.prepareStatement(insertRecordAnimal);
+				preparedStatement.setString(1, currentRecordID);
+				preparedStatement.setString(2, currentAnimal);
+				preparedStatement.executeUpdate();
+				recordAnimals.put(currentAnimal, currentRecordID);
+			}
 		}
+		
 	}
 	
 	public void addLogin () throws SQLException {
 		String insertLogin = "INSERT INTO FDA_Database.Login VALUES(?, ?, ?)";
-		for (int i = 0; i < 1000; i++) {
+		System.out.println("Adding login info...");
+		loginIDS = new String[vet.size()];
+		for (int i = 0; i < vet.size(); i++) {
 			preparedStatement = connection.prepareStatement(insertLogin);
 			String id = getNewID(addedDrugIds);
 			preparedStatement.setString(1, id);
@@ -406,12 +445,58 @@ public class DatabaseConnection{
 		}
 	}
 	
+	public void addVetCred () throws SQLException {
+		String insertLogin = "INSERT INTO FDA_Database.OR_Vet_Login VALUES(?, ?, ?, ?)";
+		int counter = 0;
+		System.out.println("Adding Vet Cred..");
+		for (String vet : addedVetID) {
+			preparedStatement = connection.prepareStatement(insertLogin);
+			String id = getNewID(new ArrayList<String>());
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, orgId.get(0));
+			preparedStatement.setString(3, vet);
+			preparedStatement.setString(4, loginIDS[counter]);
+			preparedStatement.executeUpdate();
+			counter++;
+		}
+	}
+	
+	public void addRecords () throws SQLException {
+		String insertLogin = "INSERT INTO FDA_Database.Records VALUES(?, ?, ?)";
+		int counter = 0;
+		System.out.println("Adding Records...");
+		for (String owner : addedOwnerID) {
+			preparedStatement = connection.prepareStatement(insertLogin);
+			String id = getNewID(recordID);
+			preparedStatement.setString(1, id);
+			if (counter >= addedVetID.size()) {
+				counter = 0;
+			}
+			preparedStatement.setString(2, addedVetID.get(counter));
+			preparedStatement.setString(3, owner);
+			preparedStatement.executeUpdate();
+			counter++;
+			recordID.add(id);
+		}
+	}
+	
+	public void addDrugsInRecords () throws SQLException {
+		System.out.println("Adding Drugs to Records...");
+		for (String drugID : addedDrugIds) {
+			Random random = new Random();
+			int randomNumber = random.nextInt(recordID.size());
+			String currentRecord = recordID.get(randomNumber);
+			preparedStatement = connection.prepareStatement("INSERT INTO FDA_Database.Drugs_in_Records VALUES (?, ?)");
+			preparedStatement.setString(1, currentRecord);
+			preparedStatement.setString(2, drugID);
+		}
+	}
+	
 	public boolean loadDatabase (Map<String, List<Visit>> map) throws SQLException, IOException {
 		addVet();
 		addOwners();
 		addLogin();
 		for (Map.Entry<String, List<Visit>> mapEntry : map.entrySet()) {
-			String key = mapEntry.getKey();
 			List<Visit> values = mapEntry.getValue();
 			for (Visit visit : values) {
 				addAppointment(visit);
@@ -425,6 +510,9 @@ public class DatabaseConnection{
 				}
 			}
 		}
+		addVetCred();
+		addRecords();
+		addDrugsInRecords();
 		addAnimalAsso();
 		return true;
 	}
