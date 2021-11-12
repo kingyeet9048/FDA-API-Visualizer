@@ -1,3 +1,4 @@
+DROP database if exists `fda_database`;
 create database if not exists `FDA_Database`;
 use `FDA_Database`;
 
@@ -10,23 +11,22 @@ use `FDA_Database`;
 -- if you want to drop a table and reload it, I suggest just dropping the whole schema and reruning the code
 create table Ingredients (
 	In_id				varchar(20) not null,
-    Active_ingredients	varchar(20) DEFAULT NULL,
-    Dose				varchar(20) DEFAULT NULL,
+    Active_ingredients	varchar(200) DEFAULT NULL,
+    Dose				varchar(200) DEFAULT NULL,
     primary key (In_id)
     );
 
 -- -------------------------------------------------------------
 create table Drug (
 	D_id						varchar(20) not null,
-    Lot_Number					numeric(20) DEFAULT NULL,
-    Administered_by				numeric(20) DEFAULT NULL,
-    Route						varchar(20) DEFAULT NULL,
-    Used_According_to_label		varchar(20) DEFAULT NULL,
-    Previous_exposure			varchar(20) DEFAULT NULL,
-    Brand_name					varchar(20) DEFAULT NULL,
-    Dosage_form					varchar(20) DEFAULT NULL,
-    Manufacturer				varchar(20) DEFAULT NULL,
-    Atc_vet_code				varchar(20) DEFAULT NULL,
+    Lot_Number					varchar(200) DEFAULT NULL,
+    Administered_by				varchar(200) DEFAULT NULL,
+    Route						varchar(200) DEFAULT NULL,
+    Used_According_to_label		varchar(200) DEFAULT NULL,
+    Brand_name					varchar(200) DEFAULT NULL,
+    Dosage_form					varchar(200) DEFAULT NULL,
+    Manufacturer				varchar(200) DEFAULT NULL,
+    Atc_vet_code				varchar(200) DEFAULT NULL,
     primary key (D_id));
 
 create table Drug_ingredient (
@@ -39,8 +39,8 @@ create table Drug_ingredient (
 -- -------------------------------------------------------------
 create table Exposure (
 	D_id						varchar(20) not null,
-    First_exposure_date			Numeric(20) DEFAULT NULL,
-    Last_exposure_date			Numeric(20) DEFAULT NULL,
+    First_exposure_date			varchar(20) DEFAULT NULL,
+    Last_exposure_date			varchar(20) DEFAULT NULL,
     primary key (D_id),
 	foreign key (`D_id`) references Drug(`D_id`) ON UPDATE CASCADE ON DELETE CASCADE
     );
@@ -60,9 +60,8 @@ create table Owners (
     Gender						varchar(20) DEFAULT NULL,
     Reproductive_status			varchar(20) DEFAULT NULL,
     Physiological_status		varchar(45) DEFAULT NULL,
-    Age							numeric(20) DEFAULT NULL,
+    Age							varchar(20) DEFAULT NULL,
     Weight						varchar(20) DEFAULT NULL,
-    Breed						varchar(20) DEFAULT NULL,
     primary key (A_id)
     );
 
@@ -101,8 +100,8 @@ foreign key (`Rec_id`) references Records(`Rec_id`) ON UPDATE CASCADE ON DELETE 
 -- -------------------------------------------------------------
 create table Appointment_Outcome (
 	Apt_Out_id						varchar(20) not null,
-    Medical_status					varchar(20) DEFAULT NULL,
-    Number_of_animals_affected		numeric(20) DEFAULT NULL,
+    Medical_status					varchar(200) DEFAULT NULL,
+    Number_of_animals_affected		varchar(200) DEFAULT NULL,
     primary key (Apt_out_id)
     );
 
@@ -141,8 +140,8 @@ create table Login (
 -- -------------------------------------------------------------
 create table Organizations (
 	Or_id				varchar(20) not null,
-    Address				varchar(20) DEFAULT NULL,
-    Title				varchar(20) DEFAULT NULL,
+    Address				varchar(200) DEFAULT NULL,
+    Title				varchar(200) DEFAULT NULL,
     primary key (Or_id)
     );
 Insert into Organizations values('0TUS6','','');

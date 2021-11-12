@@ -127,130 +127,130 @@ public class DataCollector {
 		this.links = links;
 	}
 
-//	public static void main(String args[]) {
-//		DataCollector dataCollector = new DataCollector(new String[] {
-//				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
-//				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
-//		try {
-//			dataCollector.fetchSaveData();
-//			Map<String, List<Visit>> allVisitsMap = dataCollector.getDowloadedData();
-//			
-//			// types of animals present in database
-//			for (Map.Entry<String, List<Visit>> mapEntry : allVisitsMap.entrySet()) {
-//				String key = mapEntry.getKey();
-//				List<Visit> values = mapEntry.getValue();
-//				Map<String, Integer> animalTypes = new TreeMap<>();
-//				Map<String, Integer> brandNames = new TreeMap<>();
-//				Map<String, Integer> outcomeTypes = new TreeMap<>();
-//				Map<String, Integer> routes = new TreeMap<String, Integer>();
-//				Map<String, Integer> numAffected = new TreeMap<>();
-//				Map<String, Integer> organizationsMap = new TreeMap<>();
-//				Map<String, Integer> healthMap = new TreeMap<>();
-//				
-//				System.err.printf("\n\nSummery For %s: \n", key);
-//				
-//				// all visits
-//				for (Visit visit : values) {
-//					// current vist
-//					Animal currentAnimal = visit.getAnimal();
-//					if (currentAnimal != null) {
-//						int animalCount = animalTypes.getOrDefault(currentAnimal.getSpecies(), 0);
-//						if (animalCount == 0) {
-//							animalTypes.put(currentAnimal.getSpecies(), 1);
-//						}
-//						else {
-//							animalTypes.put(currentAnimal.getSpecies(), animalCount + 1);
-//						}
-//					}
-//					List<Drug> drugs = visit.getDrug();
-//					if (drugs != null) {
-//						for (Drug drug : drugs) {
-//							if (drug.getAdministeredBy() == null) {
-//								continue;
-//							}
-//							int brandCount = brandNames.getOrDefault(drug.getAdministeredBy(), 0);
-//							if (brandCount == 0) {
-//								brandNames.put(drug.getAdministeredBy(), 1);
-//							}
-//							else {
-//								brandNames.put(drug.getAdministeredBy(), brandCount + 1);
-//
-//							}
-//						}
-//						for (Drug drug : drugs) {
-//							if (drug.getRoute() == null) {
-//								continue;
-//							}
-//							int routeCount = routes.getOrDefault(drug.getRoute(), 0);
-//							if (routeCount == 0) {
-//								routes.put(drug.getRoute(), 1);
-//							}
-//							else {
-//								routes.put(drug.getRoute(), routeCount + 1);
-//
-//							}
-//						}
-//					}
-//					List<Outcome> outcomes = visit.getOutcome();
-//					if (outcomes != null) {
-//						for (Outcome out : outcomes) {
-//							int outcomeCount = outcomeTypes.getOrDefault(out.getMedicalStatus(), 0);
-//							if (outcomeCount == 0) {
-//								outcomeTypes.put(out.getMedicalStatus(), 1);
-//							}
-//							else {
-//								outcomeTypes.put(out.getMedicalStatus(), outcomeCount + 1);
-//							}
-//							int numCount = numAffected.getOrDefault(out.getNumberOfAnimalsAffected(), 0);
-//							if (numCount == 0) {
-//								numAffected.put(out.getNumberOfAnimalsAffected(), 1);
-//							}
-//							else {
-//								numAffected.put(out.getNumberOfAnimalsAffected(), numCount + 1);
-//							}
-//						}
-//					}
-//					HealthAssessmentPriorToExposure health = visit.getHealthAssessmentPriorToExposure();
-//					if (health != null) {
-//						if (health.getCondition() == null) {
-//							continue;
-//						}
-//						int healthCount = healthMap.getOrDefault(health.getCondition(), 0);
-//						if (healthCount == 0) {
-//							healthMap.put(health.getCondition(), 1);
-//						}
-//						else {
-//							healthMap.put(health.getCondition(), healthCount + 1);
-//
-//						}
-//					}
-//					Receiver receiver = visit.getReceiver();
-//					if (receiver != null) {
-//						if (receiver.getOrganization() == null) {
-//							continue;
-//						}
-//						int receiverCount = organizationsMap.getOrDefault(receiver.getOrganization(), 0);
-//						if (receiverCount == 0) {
-//							organizationsMap.put(receiver.getOrganization(), 1);
-//						}
-//						else {
-//							organizationsMap.put(receiver.getOrganization(), receiverCount + 1);
-//						}
-//					}
-//				}
-//				System.out.printf("Number of Records (Vets visits): \n%d\n", values.size());
-//				System.out.printf("Animal Counts: \n%s\n", animalTypes.toString());
-//				System.out.printf("Drug Administration Distribution: \n%s\n", brandNames.toString());
-//				System.out.printf("How the drug was taken distribution (Route): \n%s\n", routes.toString());
-//				System.out.printf("Outcome Distribution: \n%s\n", outcomeTypes.toString());
-//				System.out.printf("Number of Animals Affected in a visit at a time: \n%s\n", numAffected.toString());
-//				System.out.printf("Health Assesment Prior to Exposure Distribution: \n%s\n", healthMap.toString());
-//				System.out.printf("Organization Distribution: \n%s\n", organizationsMap.toString());
-//			}			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	public static void main(String args[]) {
+		DataCollector dataCollector = new DataCollector(new String[] {
+				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
+				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
+		try {
+			dataCollector.fetchSaveData();
+			Map<String, List<Visit>> allVisitsMap = dataCollector.getDowloadedData();
+			
+			// types of animals present in database
+			for (Map.Entry<String, List<Visit>> mapEntry : allVisitsMap.entrySet()) {
+				String key = mapEntry.getKey();
+				List<Visit> values = mapEntry.getValue();
+				Map<String, Integer> animalTypes = new TreeMap<>();
+				Map<String, Integer> brandNames = new TreeMap<>();
+				Map<String, Integer> outcomeTypes = new TreeMap<>();
+				Map<String, Integer> routes = new TreeMap<String, Integer>();
+				Map<String, Integer> numAffected = new TreeMap<>();
+				Map<String, Integer> organizationsMap = new TreeMap<>();
+				Map<String, Integer> healthMap = new TreeMap<>();
+				
+				System.err.printf("\n\nSummery For %s: \n", key);
+				
+				// all visits
+				for (Visit visit : values) {
+					// current vist
+					Animal currentAnimal = visit.getAnimal();
+					if (currentAnimal != null) {
+						int animalCount = animalTypes.getOrDefault(currentAnimal.getSpecies(), 0);
+						if (animalCount == 0) {
+							animalTypes.put(currentAnimal.getSpecies(), 1);
+						}
+						else {
+							animalTypes.put(currentAnimal.getSpecies(), animalCount + 1);
+						}
+					}
+					List<Drug> drugs = visit.getDrug();
+					if (drugs != null) {
+						for (Drug drug : drugs) {
+							if (drug.getAdministeredBy() == null) {
+								continue;
+							}
+							int brandCount = brandNames.getOrDefault(drug.getAdministeredBy(), 0);
+							if (brandCount == 0) {
+								brandNames.put(drug.getAdministeredBy(), 1);
+							}
+							else {
+								brandNames.put(drug.getAdministeredBy(), brandCount + 1);
+
+							}
+						}
+						for (Drug drug : drugs) {
+							if (drug.getRoute() == null) {
+								continue;
+							}
+							int routeCount = routes.getOrDefault(drug.getRoute(), 0);
+							if (routeCount == 0) {
+								routes.put(drug.getRoute(), 1);
+							}
+							else {
+								routes.put(drug.getRoute(), routeCount + 1);
+
+							}
+						}
+					}
+					List<Outcome> outcomes = visit.getOutcome();
+					if (outcomes != null) {
+						for (Outcome out : outcomes) {
+							int outcomeCount = outcomeTypes.getOrDefault(out.getMedicalStatus(), 0);
+							if (outcomeCount == 0) {
+								outcomeTypes.put(out.getMedicalStatus(), 1);
+							}
+							else {
+								outcomeTypes.put(out.getMedicalStatus(), outcomeCount + 1);
+							}
+							int numCount = numAffected.getOrDefault(out.getNumberOfAnimalsAffected(), 0);
+							if (numCount == 0) {
+								numAffected.put(out.getNumberOfAnimalsAffected(), 1);
+							}
+							else {
+								numAffected.put(out.getNumberOfAnimalsAffected(), numCount + 1);
+							}
+						}
+					}
+					HealthAssessmentPriorToExposure health = visit.getHealthAssessmentPriorToExposure();
+					if (health != null) {
+						if (health.getCondition() == null) {
+							continue;
+						}
+						int healthCount = healthMap.getOrDefault(health.getCondition(), 0);
+						if (healthCount == 0) {
+							healthMap.put(health.getCondition(), 1);
+						}
+						else {
+							healthMap.put(health.getCondition(), healthCount + 1);
+
+						}
+					}
+					Receiver receiver = visit.getReceiver();
+					if (receiver != null) {
+						if (receiver.getOrganization() == null) {
+							continue;
+						}
+						int receiverCount = organizationsMap.getOrDefault(receiver.getOrganization(), 0);
+						if (receiverCount == 0) {
+							organizationsMap.put(receiver.getOrganization(), 1);
+						}
+						else {
+							organizationsMap.put(receiver.getOrganization(), receiverCount + 1);
+						}
+					}
+				}
+				System.out.printf("Number of Records (Vets visits): \n%d\n", values.size());
+				System.out.printf("Animal Counts: \n%s\n", animalTypes.toString());
+				System.out.printf("Drug Administration Distribution: \n%s\n", brandNames.toString());
+				System.out.printf("How the drug was taken distribution (Route): \n%s\n", routes.toString());
+				System.out.printf("Outcome Distribution: \n%s\n", outcomeTypes.toString());
+				System.out.printf("Number of Animals Affected in a visit at a time: \n%s\n", numAffected.toString());
+				System.out.printf("Health Assesment Prior to Exposure Distribution: \n%s\n", healthMap.toString());
+				System.out.printf("Organization Distribution: \n%s\n", organizationsMap.toString());
+			}			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

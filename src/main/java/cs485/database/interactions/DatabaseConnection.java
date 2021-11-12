@@ -2,15 +2,26 @@ package cs485.database.interactions;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
+import cs485.preprocessing.ActiveIngredient;
+import cs485.preprocessing.Animal;
 import cs485.preprocessing.DataCollector;
 import cs485.preprocessing.Drug;
+import cs485.preprocessing.Receiver;
 import cs485.preprocessing.Visit; 
 public class DatabaseConnection{
 
@@ -19,6 +30,25 @@ public class DatabaseConnection{
 	private String username;
 	private String password;
 	private PreparedStatement preparedStatement;
+	List<String> addedIds = new ArrayList<>();
+	List<String> addedDrugIds = new ArrayList<>();
+	List<String> addedIngredientName = new ArrayList<>();
+	List<String> addedVetCode = new LinkedList<>();
+	List<String> names = new LinkedList<>();
+	List<String> address = new LinkedList<>();
+	List<String> vet = new LinkedList<>();
+	List<String> org = new LinkedList<>();
+	List<String> orgId = new LinkedList<>();
+	List<String> appointmentID = new LinkedList<>();
+	List<String> appointmentOutID = new LinkedList<>();
+	private List<String> addedOwnerID = new LinkedList<>();
+	private List<String> addedAnimalID = new LinkedList<>();
+	private List<String> addedVetID = new LinkedList<>();
+
+	Map<String, String> anApp = new HashMap<>();
+	Map<String, String> anAppOut = new HashMap<>();
+	String[] loginIDS = new String[1000];
+	
 
 	public DatabaseConnection() {
 	}
@@ -77,32 +107,326 @@ public class DatabaseConnection{
 		return false;
 	}
 	
-	public boolean loadDatabase (Map<String, List<Visit>> map) {
+	public String getNewID (List<String> ids) {
+		String uniqueID;
+		while (true) {
+			uniqueID = UUID.randomUUID().toString().substring(0, 18);
+			if (ids.contains(uniqueID)) {
+				continue;
+			}
+			else {
+				break;
+			}
+		}
+		return uniqueID;
+	}
+	
+	private String addIngredients (ActiveIngredient ingredient) throws SQLException {
+		System.out.println("Adding Ingredient...");
 		String insertIngredientQuery = "INSERT INTO FDA_Database.ingredients VALUES (?, ?, ?)";
+		String getIngredientID = "SELECT In_id FROM FDA_Database.ingredients WHERE Active_ingredients = ?";
+		preparedStatement = connection.prepareStatement(getIngredientID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		preparedStatement.setString(1, ingredient.getName());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		resultSet.next();
+		resultSet.last();
+		int rowNumber = resultSet.getRow();
+		if (rowNumber > 0) {
+			resultSet.first();
+			String idString = resultSet.getString(1);
+			resultSet.close();
+			return idString;
+		}
+		else {
+			StringBuilder builder = new StringBuilder();
+			String id = getNewID(addedIds);
+			String name = ingredient.getName();
+			builder.append(ingredient.getDose().getDenominator() + " ");
+			builder.append(ingredient.getDose().getDenominatorUnit() + " ");
+			builder.append(ingredient.getDose().getNumerator() + " ");
+			builder.append(ingredient.getDose().getNumeratorUnit() + " ");
+			String dose = builder.toString().trim();
+			preparedStatement = connection.prepareStatement(insertIngredientQuery);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, name);
+			preparedStatement.setString(3, dose);
+			preparedStatement.executeUpdate();
+			addedIds.add(id);
+			addedIngredientName.add(name);
+			return id;
+		}
+	}
+	
+	public void addDrug (List<Drug> drugs) throws SQLException {
+		String insertDrug = "INSERT INTO FDA_Database.Drug VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insertDrugIngredients = "INSERT INTO FDA_Database.Drug_ingredient VALUES (?, ?)";
+		String insertExposure = "INSERT INTO FDA_Database.Exposure VALUES (?, ?, ?)";
+		String getDrugID = "SELECT D_id FROM FDA_Database.Drug WHERE Atc_vet_code = ?";
+		for (Drug drug : drugs) {
+			// check to see if the atc vet code is contained within the list
+			// if it is, continue, aready processed it. 
+			if (addedVetCode.contains(drug.getAtcVetCode())) {
+				continue;
+			}
+			// add a new drug...
+			preparedStatement = connection.prepareStatement(insertDrug);
+			String drugId = getNewID(addedDrugIds);
+			preparedStatement.setString(1, drugId);
+			preparedStatement.setString(2, drug.getLotNumber());
+			preparedStatement.setString(3, drug.getAdministeredBy());
+			preparedStatement.setString(4, drug.getRoute());
+			preparedStatement.setString(5, drug.getUsedAccordingToLabel());
+			preparedStatement.setString(6, drug.getBrandName());
+			preparedStatement.setString(7, drug.getDosageForm());
+			preparedStatement.setString(8, drug.getManufacturer().getName() + " " + drug.getManufacturer().getRegistrationNumber());
+			preparedStatement.setString(9, drug.getAtcVetCode());
+			preparedStatement.executeUpdate();
+			preparedStatement = connection.prepareStatement(insertExposure);
+			preparedStatement.setString(1, drugId);
+			preparedStatement.setString(2, drug.getFirstExposureDate());
+			preparedStatement.setString(3, drug.getLastExposureDate());
+			preparedStatement.executeUpdate();
+			for (ActiveIngredient ingredient : drug.getActiveIngredients()) {
+				if (ingredient.getName() == null) {
+					continue;
+				}
+				String id = addIngredients(ingredient);
+				preparedStatement = connection.prepareStatement(insertDrugIngredients);
+				preparedStatement.setString(1, drugId);
+				preparedStatement.setString(2, id);
+				preparedStatement.executeUpdate();
+			}
+			addedVetCode.add(drug.getAtcVetCode());
+			addedDrugIds.add(drugId);
+
+		}
+		
+	}
+	
+	public void addOwners () throws IOException, SQLException {
+		BufferedReader namesReader = new BufferedReader(new FileReader (new File("names.txt")));
+		BufferedReader addressReader = new BufferedReader(new FileReader(new File("address.txt")));
+		
+		String line = namesReader.readLine();
+		while (line != null) {
+			if (!names.contains(line)) {
+				names.add(line);
+			}
+			line = namesReader.readLine();
+		}
+		line = addressReader.readLine();
+		while (line != null) {
+			if (line.contains("address1")) {
+				line = line.replace("address1 ", "");
+				if (!address.contains(line)) {
+					address.add(line);
+				}
+			}
+			line = addressReader.readLine();
+		}
+		namesReader.close();
+		addressReader.close();
+		String insertOwner = "INSERT INTO FDA_Database.Owners VALUES (?, ?, ?)";
+		int counter = 0;
+		for (String name : names) {
+			preparedStatement = connection.prepareStatement(insertOwner);
+			String id = getNewID(addedOwnerID);
+			preparedStatement.setString(1, id);
+			if (counter >= address.size()) {
+				counter = 0;
+			}
+			preparedStatement.setString(2, address.get(counter));
+			preparedStatement.setString(3, name);
+			preparedStatement.executeUpdate();
+			counter++;
+			addedOwnerID.add(id);
+		}
+	}
+	
+	public void addAnimal (Animal animal) throws SQLException {
+		String insertAnimal = "INSERT INTO FDA_Database.Animal VALUES (?, ?, ?, ?, ?, ? ,?)";
+		preparedStatement = connection.prepareStatement(insertAnimal);
+		String id = getNewID(addedAnimalID );
+		preparedStatement.setString(1, id);
+		preparedStatement.setString(2, animal.getSpecies());
+		preparedStatement.setString(3, animal.getGender());
+		preparedStatement.setString(4, animal.getReproductiveStatus());
+		preparedStatement.setString(5, animal.getFemaleAnimalPhysiologicalStatus());
+		preparedStatement.setString(6, animal.getAge().getQualifier());
+		preparedStatement.setString(7, animal.getWeight() != null ? animal.getWeight().getQualifier() + " " + animal.getWeight().getUnit() : null);
+		preparedStatement.executeUpdate();
+		addedAnimalID.add(id);
+		
+	}
+	
+	public void addVet () throws IOException, SQLException {
+		System.out.println("Adding Vets...");
+		BufferedReader vetReader = new BufferedReader(new FileReader(new File("vet.txt")));
+		
+		String line = vetReader.readLine();
+		while (line != null) {
+			if (!vet.contains(line)) {
+				vet.add(line);
+			}
+			line = vetReader.readLine();
+		}
+		
+		for (String vet : vet) {
+			String insertVet = "INSERT INTO FDA_Database.Vet VALUES (?, ?)";
+			
+			preparedStatement = connection.prepareStatement(insertVet);
+			String id = getNewID(addedVetID);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, vet);
+			preparedStatement.executeUpdate();
+			addedVetID.add(id);
+		}
+		vetReader.close();
+	}
+	
+	public void addOrganization (Receiver receiver) throws SQLException {
+		if (!org.contains(receiver.getOrganization()) && receiver.getOrganization() != null) {
+			String insertOrg = "INSERT INTO FDA_Database.Organizations VALUES (?, ?, ?)";
+			preparedStatement = connection.prepareStatement(insertOrg);
+			String id = getNewID(orgId);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, receiver.getStreetAddress() + " "+ receiver.getCity() + " " + receiver.getCountry() + " " + receiver.getState() + " " + receiver.getPostalCode());
+			preparedStatement.setString(3, receiver.getOrganization());
+			preparedStatement.executeUpdate();
+			org.add(receiver.getOrganization());
+			orgId.add(id);
+		}
+	}
+	
+	public void addAppointment (Visit visit) throws SQLException {
+		String insertAppoint = "INSERT INTO FDA_Database.Appointment VALUES(?, ?, ?)";
+		preparedStatement = connection.prepareStatement(insertAppoint);
+		String id = getNewID(appointmentID);
+		preparedStatement.setString(1, id);
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(addedVetID.size());
+		preparedStatement.setString(2, addedVetID.get(randomNumber));
+		preparedStatement.setString(3, visit.getOnsetDate());
+		preparedStatement.executeUpdate();
+		appointmentID.add(id);
+	}
+	
+	public void addAppointmentOUt (Visit visit) throws SQLException {
+		String insertAppoint = "INSERT INTO FDA_Database.Appointment_Outcome VALUES(?, ?, ?)";
+		preparedStatement = connection.prepareStatement(insertAppoint);
+		String id = getNewID(appointmentOutID);
+		preparedStatement.setString(1, id);
+		preparedStatement.setString(2, visit.getOutcome() != null ? visit.getOutcome().get(0).getMedicalStatus() : null);
+		preparedStatement.setString(3, visit.getOutcome() != null ? visit.getOutcome().get(0).getNumberOfAnimalsAffected() : null);
+		preparedStatement.executeUpdate();
+		appointmentOutID.add(id);
+	}
+	
+	public boolean checkAnimal(Map<String, String> checking, String animal, String idToCheck) {
+		for (String ids : checking.get(animal).split(" ")) {
+			if (ids.equals(idToCheck)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void addAnimalAsso () throws SQLException {
+		String insertAppAnimal = "INSERT INTO FDA_Database.Appointment_Animals VALUES(?, ?)";
+		String insertAnimalOut = "INSERT INTO FDA_Database.Animal_Outcome VALUES(?, ?)";
+
+		for (int i = 0; i < 1000; i++) {
+			Random random = new Random();
+			String currentAnimal = addedAnimalID.get(random.nextInt(addedAnimalID.size()));
+			boolean isThere = anApp.getOrDefault(currentAnimal, null) != null || anAppOut.getOrDefault(currentAnimal, null) != null;
+			if (isThere) {
+				int randomAppointment = random.nextInt(appointmentID.size());
+				int randomAppOut = random.nextInt(appointmentOutID.size());
+				String appID = appointmentID.get(randomAppointment);
+				String appOutID = appointmentOutID.get(randomAppOut);
+				while (true) {
+					if (checkAnimal(anApp, currentAnimal, appID)) {
+						randomAppointment = random.nextInt(appointmentID.size());
+						appID = appointmentID.get(randomAppointment);
+						continue;
+					}
+					else {
+						break;
+					}
+				}
+				while (true) {
+					if (checkAnimal(anAppOut, currentAnimal, appOutID)) {
+						randomAppOut = random.nextInt(appointmentOutID.size());
+						appOutID = appointmentOutID.get(randomAppOut);
+						continue;
+					}
+					else {
+						break;
+					}
+				}
+				preparedStatement = connection.prepareStatement(insertAppAnimal);
+				preparedStatement.setString(1, appID);
+				preparedStatement.setString(2, currentAnimal);
+				preparedStatement.executeUpdate();
+				preparedStatement = connection.prepareStatement(insertAnimalOut);
+				preparedStatement.setString(1, appOutID);
+				preparedStatement.setString(2, currentAnimal);
+				preparedStatement.executeUpdate();
+				anApp.put(currentAnimal, anApp.get(currentAnimal) + " " + appID);
+				anAppOut.put(currentAnimal, anAppOut.get(currentAnimal) + " " + anAppOut);
+			}
+			else {
+				int randomAppointment = random.nextInt(appointmentID.size());
+				int randomAppOut = random.nextInt(appointmentOutID.size());
+				String appID = appointmentID.get(randomAppointment);
+				String appOutID = appointmentOutID.get(randomAppOut);
+				preparedStatement = connection.prepareStatement(insertAppAnimal);
+				preparedStatement.setString(1, appID);
+				preparedStatement.setString(2, currentAnimal);
+				preparedStatement.executeUpdate();
+				preparedStatement = connection.prepareStatement(insertAnimalOut);
+				preparedStatement.setString(1, appOutID);
+				preparedStatement.setString(2, currentAnimal);
+				preparedStatement.executeUpdate();
+				anApp.put(currentAnimal, appID);
+				anAppOut.put(currentAnimal, appOutID);
+			}
+		}
+	}
+	
+	public void addLogin () throws SQLException {
+		String insertLogin = "INSERT INTO FDA_Database.Login VALUES(?, ?, ?)";
+		for (int i = 0; i < 1000; i++) {
+			preparedStatement = connection.prepareStatement(insertLogin);
+			String id = getNewID(addedDrugIds);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, getNewID(addedDrugIds));
+			preparedStatement.setString(3, getNewID(addedDrugIds).substring(0, 7));
+			preparedStatement.executeUpdate();
+			loginIDS[i] = id;
+		}
+	}
+	
+	public boolean loadDatabase (Map<String, List<Visit>> map) throws SQLException, IOException {
+		addVet();
+		addOwners();
+		addLogin();
 		for (Map.Entry<String, List<Visit>> mapEntry : map.entrySet()) {
 			String key = mapEntry.getKey();
 			List<Visit> values = mapEntry.getValue();
-			Map<String, Integer> atcCodesMap = new HashMap<String, Integer>();
 			for (Visit visit : values) {
-				for (Drug drug : visit.getDrug()) {
-					if (drug.getAtcVetCode() == null) {
-						continue;
-					}
-					if (drug.getAtcVetCode().equals("QA02BC01")) {
-						System.out.println(drug.toString());
-					}
-					int current = atcCodesMap.getOrDefault(drug.getAtcVetCode(), 0);
-					if (current == 0) {
-						atcCodesMap.put(drug.getAtcVetCode(), 1);
-					}
-					else {
-						atcCodesMap.put(drug.getAtcVetCode(), atcCodesMap.get(drug.getAtcVetCode()) + 1);
-//						System.out.println(drug.toString());
-					}
+				addAppointment(visit);
+				addAppointmentOUt(visit);
+				if (visit.getReceiver() != null) {
+					addOrganization(visit.getReceiver());
+				}
+				addDrug(visit.getDrug());
+				if (visit.getAnimal() != null) {
+					addAnimal(visit.getAnimal());
 				}
 			}
-			System.out.println(atcCodesMap.toString());
 		}
+		addAnimalAsso();
 		return true;
 	}
 	
@@ -119,7 +443,12 @@ public class DatabaseConnection{
 		DatabaseConnection connection = new DatabaseConnection();
 		connection.newDatabaseConnection();
 		System.out.println(connection.isConnectionAlive());
-		connection.loadDatabase(dataCollector.getDowloadedData());
+		try {
+			connection.loadDatabase(dataCollector.getDowloadedData());
+		} catch (SQLException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		connection.closeConnection();
 	}
 
