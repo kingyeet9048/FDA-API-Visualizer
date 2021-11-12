@@ -122,7 +122,6 @@ public class DatabaseConnection{
 	}
 	
 	private String addIngredients (ActiveIngredient ingredient) throws SQLException {
-		System.out.println("Adding Ingredient...");
 		String insertIngredientQuery = "INSERT INTO FDA_Database.ingredients VALUES (?, ?, ?)";
 		String getIngredientID = "SELECT In_id FROM FDA_Database.ingredients WHERE Active_ingredients = ?";
 		preparedStatement = connection.prepareStatement(getIngredientID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -335,7 +334,7 @@ public class DatabaseConnection{
 		String insertAppAnimal = "INSERT INTO FDA_Database.Appointment_Animals VALUES(?, ?)";
 		String insertAnimalOut = "INSERT INTO FDA_Database.Animal_Outcome VALUES(?, ?)";
 
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 100; i++) {
 			Random random = new Random();
 			String currentAnimal = addedAnimalID.get(random.nextInt(addedAnimalID.size()));
 			boolean isThere = anApp.getOrDefault(currentAnimal, null) != null || anAppOut.getOrDefault(currentAnimal, null) != null;
