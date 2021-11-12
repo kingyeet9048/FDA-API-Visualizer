@@ -144,7 +144,7 @@ create table Organizations (
     Title				varchar(200) DEFAULT NULL,
     primary key (Or_id)
     );
-Insert into Organizations values('0TUS6','','');
+
 -- -------------------------------------------------------------
 create table OR_Vet_Login (
 	Cred_id				varchar(20) not null,
