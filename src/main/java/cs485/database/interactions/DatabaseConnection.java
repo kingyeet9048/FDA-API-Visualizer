@@ -489,6 +489,7 @@ public class DatabaseConnection{
 			preparedStatement = connection.prepareStatement("INSERT INTO FDA_Database.Drugs_in_Records VALUES (?, ?)");
 			preparedStatement.setString(1, currentRecord);
 			preparedStatement.setString(2, drugID);
+			preparedStatement.executeUpdate();
 		}
 	}
 	
