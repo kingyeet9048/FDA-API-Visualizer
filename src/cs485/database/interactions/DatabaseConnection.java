@@ -17,14 +17,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
+import cs485.preprocessing.*;
 
-import cs485.preprocessing.ActiveIngredient;
-import cs485.preprocessing.Animal;
-import cs485.preprocessing.DataCollector;
-import cs485.preprocessing.Drug;
-import cs485.preprocessing.Receiver;
-import cs485.preprocessing.Visit; 
 public class DatabaseConnection{
 
 	private final String url = "jdbc:mysql://localhost:3306";
@@ -164,7 +158,7 @@ public class DatabaseConnection{
 		String insertDrug = "INSERT INTO FDA_Database.Drug VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		String insertDrugIngredients = "INSERT INTO FDA_Database.Drug_ingredient VALUES (?, ?)";
 		String insertExposure = "INSERT INTO FDA_Database.Exposure VALUES (?, ?, ?)";
-		String getDrugID = "SELECT D_id FROM FDA_Database.Drug WHERE Atc_vet_code = ?";
+
 		for (Drug drug : drugs) {
 			// check to see if the atc vet code is contained within the list
 			// if it is, continue, aready processed it. 
