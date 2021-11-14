@@ -106,7 +106,7 @@ public class DatabaseConnection{
 	}
 	
 	public boolean checkCredentials (String username, String password) {
-		String query = "SELECT username, passwords FROM FDA_Database.Login WHERE username = ? and passwords = ?";
+		String query = "SELECT username, passwords, isActive FROM FDA_Database.Login WHERE username = ? and passwords = ?";
 		
 		try {
 			preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -116,8 +116,16 @@ public class DatabaseConnection{
 			set.last();
 			int rowNumber = set.getRow();
 			if (rowNumber > 0) {
-				set.close();
-				return true;
+				set.first();
+				String isActive = set.getString(3);
+				if (isActive.equals("1")) {
+					set.close();
+					return true;
+				}
+				else {
+					set.close();
+					return false;
+				}
 			}
 			else {
 				set.close();
