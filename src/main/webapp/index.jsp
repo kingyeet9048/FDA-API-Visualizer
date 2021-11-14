@@ -32,11 +32,11 @@
 <!-- 		<br>
 			<input id ="forgot" type="submit" Value="Forgot Password?" /> -->
 	<%
-String Password=request.getParameter("Password");
-String Username=request.getParameter("Username");
+String Password=request.getParameter("password");
+String Username=request.getParameter("username");
 
 if (Password!= null&&!Password.trim().equals("") && Username!= null&&!Username.trim().equals("")){
-	DatabaseConnection Data=new DatabaseConnection();
+	DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
 	boolean flag=Data.checkCredentials(Username,Password);
 	if(flag) 
 		{%><script type="text/javascript">window.location.replace("Collection.jsp");</script><%}
@@ -50,15 +50,3 @@ if (Password!= null&&!Password.trim().equals("") && Username!= null&&!Username.t
 
 </body>
 </html>
-
-	<%-- <%
-	DataCollector dataCollector = new DataCollector(new String[] {
-			"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
-			"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
-	try {
-		dataCollector.fetchSaveData();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-%> --%>

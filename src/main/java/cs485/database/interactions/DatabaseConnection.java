@@ -48,17 +48,22 @@ public class DatabaseConnection{
 	String[] loginIDS = new String[1000];
 	
 
-	public DatabaseConnection() {
-		newDatabaseConnection();
+	public DatabaseConnection(String path) {
+		newDatabaseConnection(path);
 	}
 	
-	public void newDatabaseConnection () {
+	public void newDatabaseConnection (String path) {
 		try {
-			loadCredentials();
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			setConnection(DriverManager.getConnection(url, username, password));
-			
+			boolean result = loadCredentials(path);
+			if (result) {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				
+				setConnection(DriverManager.getConnection(url, username, password));
+				
+			}
+			else {
+				System.out.println("Credentials were not found. Cannot set Connection...");
+			}
 		} catch (ClassNotFoundException e) {
 			System.out.println("New connection cannot find driver...: " + e.getMessage());
 		} catch (SQLException e1) {
@@ -74,15 +79,17 @@ public class DatabaseConnection{
 		this.connection = connection;
 	}
 	
-	private void loadCredentials () {
+	private boolean loadCredentials (String path) {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(new File(".env")));
+			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
 			username = reader.readLine();
 			password = reader.readLine();
 			reader.close();
+			return true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Cannot read .env file...: " + e.getMessage());
+			return false;
 		}
 	}
 	
@@ -602,8 +609,7 @@ public class DatabaseConnection{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		DatabaseConnection connection = new DatabaseConnection();
-		connection.newDatabaseConnection();
+		DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
 		System.out.println(connection.isConnectionAlive());
 		try {
 			connection.loadDatabase(dataCollector.getDowloadedData());
