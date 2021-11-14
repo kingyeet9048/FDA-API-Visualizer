@@ -49,6 +49,7 @@ public class DatabaseConnection{
 	
 
 	public DatabaseConnection() {
+		newDatabaseConnection();
 	}
 	
 	public void newDatabaseConnection () {

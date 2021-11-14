@@ -26,11 +26,11 @@
 		Password: <br>
 		<input id="password" name="password" type="text" /><br> 
 		<br> 
-			<input id ="login" type="submit" Value="LOGIN"></input>
+			<input id ="login" type="submit" Value="LOGIN" />
 	</form>
 		
 <!-- 		<br>
-			<input id ="forgot" type="submit" Value="Forgot Password?"></input> -->
+			<input id ="forgot" type="submit" Value="Forgot Password?" /> -->
 	<%
 String Password=request.getParameter("Password");
 String Username=request.getParameter("Username");
