@@ -105,6 +105,31 @@ public class DatabaseConnection{
 		return false;
 	}
 	
+	public boolean checkCredentials (String username, String password) {
+		String query = "SELECT username, passwords FROM FDA_Database.Login WHERE username = ? and passwords = ?";
+		
+		try {
+			preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, password);
+			ResultSet set = preparedStatement.executeQuery();
+			set.last();
+			int rowNumber = set.getRow();
+			if (rowNumber > 0) {
+				set.close();
+				return true;
+			}
+			else {
+				set.close();
+				return false;
+			}
+		} catch (SQLException e) {
+			System.out.printf("Something went wrong...: %s", e.getMessage());
+			return false;
+		}
+
+	}
+	
 	public String getNewID (List<String> ids) {
 		String uniqueID;
 		while (true) {
@@ -512,6 +537,10 @@ public class DatabaseConnection{
 		return true;
 	}
 	
+	/**
+	 * Run this as a java program to laod data into your database....
+	 * @param args
+	 */
 	public static void main(String args[]) {
 		DataCollector dataCollector = new DataCollector(new String[] {
 				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
