@@ -138,6 +138,48 @@ public class DatabaseConnection{
 
 	}
 	
+	public boolean changePassword (String username, String currentPassword, String newPassword) {
+		String updateQuery = "UPDATE FDA_Database.Login SET passwords = ? WHERE username = ? and passwords = ?";
+		
+		try {
+			preparedStatement = connection.prepareStatement(updateQuery);
+			preparedStatement.setString(1, newPassword);
+			preparedStatement.setString(2, username);
+			preparedStatement.setString(3, currentPassword);
+			int set = preparedStatement.executeUpdate();
+			if (set == 1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		} catch (SQLException e) {
+			System.out.printf("Something went wrong...: %s", e.getMessage());
+			return false;
+		}
+	}
+	
+	public boolean activateAccount (String vetID) {
+		String updateQuery = "UPDATE fda_database.vet natural join fda_database.or_vet_login natural join fda_database.login SET fda_database.login.isActive = '1' WHERE (fda_database.vet.V_id = fda_database.or_vet_login.V_id and fda_database.login.ID = fda_database.or_vet_login.L_id) and fda_database.vet.V_id = ?";
+		
+		try {
+			preparedStatement = connection.prepareStatement(updateQuery);
+			preparedStatement.setString(1, vetID);
+			int result = preparedStatement.executeUpdate();
+			
+			if (result == 1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+			
+		} catch (SQLException e) {
+			System.out.printf("Something went wrong...: %s", e.getMessage());
+			return false;
+		}
+	}
+	
 	public String getNewID (List<String> ids) {
 		String uniqueID;
 		while (true) {
@@ -458,7 +500,7 @@ public class DatabaseConnection{
 	}
 	
 	public void addLogin () throws SQLException {
-		String insertLogin = "INSERT INTO FDA_Database.Login VALUES(?, ?, ?)";
+		String insertLogin = "INSERT INTO FDA_Database.Login VALUES(?, ?, ?, '0')";
 		System.out.println("Adding login info...");
 		loginIDS = new String[vet.size()];
 		for (int i = 0; i < vet.size(); i++) {

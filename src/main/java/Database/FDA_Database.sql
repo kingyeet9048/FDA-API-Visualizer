@@ -133,6 +133,7 @@ create table Login (
 	ID					varchar(20) NOT NULL,
     Username			varchar(20) NOT NULL,
     Passwords			varchar(20) NOT NULL,
+    isActive			varchar(1) NOT NULL,
     primary key (ID)
     );
 -- needed to insert random IDs for database to generate
