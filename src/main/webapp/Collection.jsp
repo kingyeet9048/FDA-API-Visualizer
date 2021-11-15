@@ -13,16 +13,16 @@
 <div class="wrapper">
 <div class="header">
 
-<div id="IDUSER">
-<p> <% Object Password=session.getAttribute("name"); 
+<div class="IDUSER">
+<p>Username: <% Object Password=session.getAttribute("name"); 
 		out.println(Password); %> </p>
 
-<p><% Object ID=session.getAttribute("ID"); 
+<p>Vet ID: <% Object ID=session.getAttribute("ID"); 
 		out.println(ID); %></p> 
-<a id="logout" onclick="logout()">LOGOUT</a>
+<a class="logout" onclick="logout()">LOGOUT</a>
 </div>
 
-<h1 class ="title">DATA COLLECTION</h1>
+<h1 class="title">DATA COLLECTION</h1>
 
 </div>
 <script type="text/javascript">function logout(){window.location.replace("index.jsp")}</script>

@@ -17,15 +17,7 @@
   	font-family: Times New Roman;
 
 }
-p{
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-#IDUSER{
-	color: white;
-	text-align: left;
-	padding-left: 10px;
-	width: 135px; }
+
 /* offset-x | offset-y | blur-radius | color */
 #div1{
 	background-color: #E8F5FF;
@@ -40,19 +32,9 @@ p{
 .title{
 	color: white;
 	text-align: center;
-	padding-right: 100px;
+	padding-right: 170px;
 	}
 	
-.header{
-	display: grid;
-	grid-template-columns: auto auto auto;
-	background-color: #282B7E;
-	padding-top: 1px;
-	padding-bottom: 1px;
-	color: white;
-	padding-right: 30px;
-	min-width: 624px;
-	}
 	
 body{
 	margin-top: 0px;
@@ -77,3 +59,27 @@ body{
 	padding: 10px 24px;
 }
 #submit:hover {background: #5d5d5e;}
+
+.header{
+	display: grid;
+	grid-template-columns: auto auto auto;
+	align-items: center;
+	background-color: #282B7E;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	color: white;
+	padding-right: 50px;
+	min-width: 734px;
+	}
+	
+.IDUSER{
+	color: white;
+	text-align: left;
+	padding-left: 10px;
+	width: 210px; }
+	
+p{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width: inherit;
+}
