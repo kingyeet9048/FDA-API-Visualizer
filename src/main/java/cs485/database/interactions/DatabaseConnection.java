@@ -23,6 +23,7 @@ public class DatabaseConnection{
 
 	private final String url = "jdbc:mysql://localhost:3306";
 	private Connection connection;
+	private String ID;
 	private String username;
 	private String password;
 	private PreparedStatement preparedStatement;
@@ -75,6 +76,13 @@ public class DatabaseConnection{
 		return connection;
 	}
 
+	public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 	private void setConnection(Connection connection) {
 		this.connection = connection;
 	}
@@ -114,7 +122,7 @@ public class DatabaseConnection{
 	}
 	
 	public boolean checkCredentials (String username, String password) {
-		String query = "SELECT username, passwords, isActive FROM FDA_Database.Login WHERE username = ? and passwords = ?";
+		String query = "SELECT ID, username, passwords, isActive FROM FDA_Database.Login WHERE username = ? and passwords = ?";
 		
 		try {
 			preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -125,9 +133,21 @@ public class DatabaseConnection{
 			int rowNumber = set.getRow();
 			if (rowNumber > 0) {
 				set.first();
-				String isActive = set.getString(3);
+				String isActive = set.getString(4);
+				
 				if (isActive.equals("1")) {
+					
 					set.close();
+					String IDquery = "SELECT vet.V_id FROM FDA_Database.vet natural join FDA_Database.or_vet_login join FDA_Database.login  join FDA_Database.organizations WHERE L_id = login.ID and organizations.Or_id = or_vet_login.Or_id and username = ? and passwords = ?";
+					preparedStatement = connection.prepareStatement(IDquery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					preparedStatement.setString(1, username);
+					preparedStatement.setString(2, password);
+					ResultSet set2 = preparedStatement.executeQuery();
+					set2.first();
+					String ID = set2.getString(1);
+					setID(ID);
+					set2.close();
+					
 					return true;
 				}
 				else {

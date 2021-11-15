@@ -5,7 +5,7 @@
 
 <html>
 <head>
-<link rel="stylesheet" href="collection.css">
+<link rel="stylesheet" href="collectcss.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Collection</title>
 </head>
@@ -16,8 +16,9 @@
 <div id="IDUSER">
 <p> <% Object Password=session.getAttribute("name"); 
 		out.println(Password); %> </p>
-<!-- <p>Username</p> -->
-<p>ID</p> 
+
+<p><% Object ID=session.getAttribute("ID"); 
+		out.println(ID); %></p> 
 <a id="logout" onclick="logout()">LOGOUT</a>
 </div>
 

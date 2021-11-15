@@ -22,9 +22,9 @@
 	<form action="index.jsp" method="get">
 		<h1>LOGIN</h1>
 		Username: <br>
-		<input id="username" name="username" type="text" /><br> 
+		<input id="username" name="username" type="text" value="55c67aae-6f26-4c46"/><br> 
 		Password: <br>
-		<input id="password" name="password" type="text" /><br> 
+		<input id="password" name="password" type="text" value="83bdd76"/><br> 
 		<br> 
 			<input id ="login" type="submit" Value="LOGIN"/>
 	</form>
@@ -38,8 +38,9 @@ session.setAttribute("name", Username);
 if (Password!= null&&!Password.trim().equals("") && Username!= null&&!Username.trim().equals("")){
 	DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
 	boolean flag=Data.checkCredentials(Username,Password);
-	if(flag) 
-		{%><script type="text/javascript">window.location.replace("Collection.jsp");</script><%}
+	if(flag) {
+		session.setAttribute("ID", Data.getID());
+		%><script type="text/javascript">window.location.replace("Collection.jsp");</script><%}
 	else 
 		{%><script type="text/javascript">confirm("These credentials do not exist");</script><% }
 }
