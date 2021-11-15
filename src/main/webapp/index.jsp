@@ -26,7 +26,7 @@
 		Password: <br>
 		<input id="password" name="password" type="text" /><br> 
 		<br> 
-			<input id ="login" type="submit" Value="LOGIN" />
+			<input id ="login" type="submit" Value="LOGIN"/>
 	</form>
 		
 <!-- 		<br>
@@ -34,7 +34,7 @@
 	<%
 String Password=request.getParameter("password");
 String Username=request.getParameter("username");
-
+session.setAttribute("name", Username);
 if (Password!= null&&!Password.trim().equals("") && Username!= null&&!Username.trim().equals("")){
 	DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
 	boolean flag=Data.checkCredentials(Username,Password);
