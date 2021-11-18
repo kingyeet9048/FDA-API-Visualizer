@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import com.mysql.cj.jdbc.exceptions.SQLError;
+
 import cs485.preprocessing.*;
 
 public class DatabaseConnection{
@@ -288,19 +290,18 @@ public class DatabaseConnection{
 			preparedStatement.setString(3, drug.getLastExposureDate());
 			preparedStatement.executeUpdate();
 			for (ActiveIngredient ingredient : drug.getActiveIngredients()) {
-				List<String> ids = new ArrayList<>();
 				if (ingredient.getName() == null) {
 					continue;
 				}
 				String id = addIngredients(ingredient);
-				if (ids.contains(id)) {
+				try {
+					preparedStatement = connection.prepareStatement(insertDrugIngredients);
+					preparedStatement.setString(1, drugId);
+					preparedStatement.setString(2, id);
+					preparedStatement.executeUpdate();
+				} catch (SQLException e) {
 					continue;
 				}
-				ids.add(id);
-				preparedStatement = connection.prepareStatement(insertDrugIngredients);
-				preparedStatement.setString(1, drugId);
-				preparedStatement.setString(2, id);
-				preparedStatement.executeUpdate();
 			}
 			addedVetCode.add(drug.getAtcVetCode());
 			addedDrugIds.add(drugId);
