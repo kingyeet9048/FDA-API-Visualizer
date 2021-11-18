@@ -626,25 +626,25 @@ public class DatabaseConnection{
 	 * Run this as a java program to laod data into your database....
 	 * @param args
 	 */
-	public static void main(String args[]) {
-		DataCollector dataCollector = new DataCollector(new String[] {
-				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
-				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
-		try {
-			dataCollector.fetchSaveData();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
-		System.out.println(connection.isConnectionAlive());
-		try {
-			connection.loadDatabase(dataCollector.getDowloadedData());
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		connection.closeConnection();
-	}
+//	public static void main(String args[]) {
+//		DataCollector dataCollector = new DataCollector(new String[] {
+//				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
+//				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
+//		try {
+//			dataCollector.fetchSaveData();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
+//		System.out.println(connection.isConnectionAlive());
+//		try {
+//			connection.loadDatabase(dataCollector.getDowloadedData());
+//		} catch (SQLException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		connection.closeConnection();
+//	}
 
 }

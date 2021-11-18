@@ -22,9 +22,9 @@
 	<form action="index.jsp" method="get">
 		<h1>LOGIN</h1>
 		Username: <br>
-		<input id="username" name="username" type="text" value="55c67aae-6f26-4c46"/><br> 
+		<input id="username" name="username" type="text" /><br> 
 		Password: <br>
-		<input id="password" name="password" type="text" value="83bdd76"/><br> 
+		<input id="password" name="password" type="text" /><br> 
 		<br> 
 			<input id ="login" type="submit" Value="LOGIN"/>
 			<br>
