@@ -19,7 +19,7 @@
 	
 <div id="div1">
 	<div id="formC">
-	<form action="index.jsp" method="get">
+	<form action="ForgotPWD.jsp" method="get">
 
 		User ID:<br>
 		<input id="username" name="username" type="text" />
