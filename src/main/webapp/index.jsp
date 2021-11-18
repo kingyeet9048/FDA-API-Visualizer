@@ -43,9 +43,12 @@ if (Password!= null&&!Password.trim().equals("") && Username!= null&&!Username.t
 	boolean flag=Data.checkCredentials(Username,Password);
 	if(flag) {
 		session.setAttribute("ID", Data.getID());
+		Data.closeConnection();
 		%><script type="text/javascript">window.location.replace("Collection.jsp");</script><%}
 	else 
-		{%><script type="text/javascript">confirm("These credentials do not exist");</script><% }
+		{
+		Data.closeConnection();
+		%><script type="text/javascript">confirm("These credentials do not exist");</script><% }
 }
 
 %>

@@ -31,15 +31,30 @@
 		<input id="NewPWD" name="NewPassword" type="text" />
 		<br> 
 		<br>
-		<input id ="reset" type="button" Value="Reset Password" onclick="" />
+		<input id ="reset" type="submit" Value="Reset Password"/>
 		<br>
 
 		<input id ="back" type="button" Value="Back" onclick="window.location.replace('index.jsp')"/>
 
 	</form>
-<script>
+	<%
+String username=request.getParameter("username");
+String oldP=request.getParameter("OldPassword");
+String newP=request.getParameter("NewPassword");
 
-</script>
+if (oldP!= null&&!oldP.trim().equals("") && newP!= null&&!newP.trim().equals("") && username!= null&&!username.trim().equals("")){
+	DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
+	boolean flag=Data.changePassword(username, oldP, newP);
+	if(flag) {
+		Data.closeConnection();
+		%><script type="text/javascript">window.location.replace("index.jsp");</script><%}
+	else 
+		{
+		Data.closeConnection();
+		%><script type="text/javascript">confirm("Try again");</script><% }
+}
+
+%>
 	</div>
 	</div>
 
