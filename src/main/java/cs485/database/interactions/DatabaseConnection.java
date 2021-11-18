@@ -83,6 +83,7 @@ public class DatabaseConnection{
     public void setID(String ID) {
         this.ID = ID;
     }
+    
 	private void setConnection(Connection connection) {
 		this.connection = connection;
 	}
@@ -287,10 +288,15 @@ public class DatabaseConnection{
 			preparedStatement.setString(3, drug.getLastExposureDate());
 			preparedStatement.executeUpdate();
 			for (ActiveIngredient ingredient : drug.getActiveIngredients()) {
+				List<String> ids = new ArrayList<>();
 				if (ingredient.getName() == null) {
 					continue;
 				}
 				String id = addIngredients(ingredient);
+				if (ids.contains(id)) {
+					continue;
+				}
+				ids.add(id);
 				preparedStatement = connection.prepareStatement(insertDrugIngredients);
 				preparedStatement.setString(1, drugId);
 				preparedStatement.setString(2, id);
