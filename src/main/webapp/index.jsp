@@ -27,6 +27,9 @@
 		<input id="password" name="password" type="text" value="83bdd76"/><br> 
 		<br> 
 			<input id ="login" type="submit" Value="LOGIN"/>
+			<br>
+			<input id ="change" type="button" Value="Change Password" onclick="window.location.replace('ForgotPWD.jsp')"/>
+
 	</form>
 		
 <!-- 		<br>

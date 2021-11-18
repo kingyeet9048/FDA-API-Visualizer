@@ -53,13 +53,13 @@ body{
 #reset:hover {background: #5d5d5e;}
 
 #back{
+	margin-top: 5px;
 	border: none;
 	color: white;
 	display: inline-block;
 	background-color: #838383;
-	margin-right: 70px;
-	margin-bottom: 98px;
 	/* top - right - bottom - left */
 	padding: 5px 15px;
+	margin-bottom: 55px;
 }
 #back:hover {background: #5d5d5e;}

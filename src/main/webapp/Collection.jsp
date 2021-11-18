@@ -10,7 +10,7 @@
 <title>Collection</title>
 </head>
 <body>
-<div class="wrapper">
+
 <div class="header">
 
 <div class="IDUSER">
@@ -19,7 +19,7 @@
 
 <p>Vet ID: <% Object ID=session.getAttribute("ID"); 
 		out.println(ID); %></p> 
-<a class="logout" onclick="logout()">LOGOUT</a>
+<a id="logout" onclick="logout()">LOGOUT</a>
 </div>
 
 <h1 class="title">DATA COLLECTION</h1>
@@ -127,6 +127,6 @@
 	</form>
 	
 </div>
-</div>
+
 </body>
 </html>

@@ -1,19 +1,47 @@
 @charset "UTF-8";
 
+#login{
+	border: none;
+	color: white;
+	display: inline-block;
+	background-color: #838383;
 
+	/* top - right - bottom - left */
+	padding: 10px 24px;
+	
+}
+#login:hover{
+	background: #5d5d5e;
+	cursor: pointer;
+}
+#change{
+	margin-top: 5px;
+	border: none;
+	color: white;
+	display: inline-block;
+	background-color: #838383;
+	/* top - right - bottom - left */
+	padding: 10px 10px;
+	
+}
+#change:hover{
+	background: #5d5d5e;
+	cursor: pointer;
+}
 #forgot{
 		margin-top: 5px;
 		border: none;
 		font-size: 10px;
   		background-color: inherit;
  		color: blue;
- 		}
+}
   
 #formC{
-	text-align: center;
-	padding-top: 150px;
-	padding-bottom: 275px;
-	}
+		text-align: center;
+		padding-top: 150px;
+		padding-bottom: 275px;
+}
+
 
 /* offset-x | offset-y | blur-radius | color */
 #div1{

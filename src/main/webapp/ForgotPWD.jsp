@@ -5,12 +5,12 @@
 <head>
 <link rel="stylesheet" href="PWDcss.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Login</title>
+<title>Change Password</title>
 </head>
 
 <body>
 <div class="header">
-<h1 class ="title">RESET PASSWORD</h1>
+<h1 class ="title">CHANGE PASSWORD</h1>
 </div>
 
 	<%@ page import="java.io.*"%>
@@ -20,14 +20,26 @@
 <div id="div1">
 	<div id="formC">
 	<form action="index.jsp" method="get">
-		User ID:
+
+		User ID:<br>
 		<input id="username" name="username" type="text" />
 		<br> 
+		Old Password:<br>
+		<input id="OldPWD" name="OldPassword" type="text" />
+		<br> 
+		New Password:<br>
+		<input id="NewPWD" name="NewPassword" type="text" />
+		<br> 
 		<br>
-		<input id ="reset" type="submit" Value="Reset Password"/>
+		<input id ="reset" type="button" Value="Reset Password" onclick="" />
+		<br>
+
+		<input id ="back" type="button" Value="Back" onclick="window.location.replace('index.jsp')"/>
+
 	</form>
-	<br>
-		<input id ="back" type="submit" Value="Back"/>
+<script>
+
+</script>
 	</div>
 	</div>
 

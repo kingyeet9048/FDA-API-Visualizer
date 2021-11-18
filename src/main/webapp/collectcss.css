@@ -7,16 +7,6 @@
 	text-align: center;
 }
 
-#logout{
-	border: none;
-	color: white;
-	font-weight: bold;
-    text-decoration: none;
-  	background-color: inherit;
-  	cursor: pointer;
-  	font-family: Times New Roman;
-
-}
 
 /* offset-x | offset-y | blur-radius | color */
 #div1{
@@ -47,19 +37,6 @@ body{
     padding-top: 30px;
     padding-bottom: 30px;
 }
-
-#submit{
-	border: none;
-	color: white;
-	display: inline-block;
-	background-color: #838383;
-	margin-top: 37px; 
-	margin-bottom: 71.82px; 
-	/* top - right - bottom - left */
-	padding: 10px 24px;
-}
-#submit:hover {background: #5d5d5e;}
-
 .header{
 	display: grid;
 	grid-template-columns: auto auto auto;
@@ -72,12 +49,41 @@ body{
 	min-width: 734px;
 	}
 	
+#submit{
+	border: none;
+	color: white;
+	display: inline-block;
+	background-color: #838383;
+	margin-top: 37px; 
+	margin-bottom: 71.82px; 
+	/* top - right - bottom - left */
+	padding: 10px 24px;
+	
+}
+#submit:hover {background: #5d5d5e;
+			   cursor: pointer;
+			   }
+			   
+#logout{
+	border: none;
+	color: white;
+  	background-color: inherit;
+  	font-family: Times New Roman;
+
+}
+
+#logout:hover {
+	cursor: pointer;
+	color: #FFFAFA;
+}
+
+
 .IDUSER{
 	color: white;
 	text-align: left;
 	padding-left: 10px;
-	width: 210px; }
-	
+	width: 210px;
+	}
 p{
 	margin-top: 5px;
 	margin-bottom: 5px;
