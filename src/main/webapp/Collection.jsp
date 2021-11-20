@@ -75,7 +75,7 @@
 		<p></p>
 		</div>
 		<div class="submit">
-			<input id ="submit" type="submit" Value="SUBMIT">
+			<input id ="submit" type="button" Value="SUBMIT" onclick="window.location.replace('Table.jsp')">
 			</div>
 	</div>
 	</form>
@@ -84,30 +84,42 @@
 
  <%
 	String Animalin=request.getParameter("Animal");
+ 	session.setAttribute("Animal", Animalin);
 	String Appointmentin=request.getParameter("Appointment");
+	session.setAttribute("Appointment", Appointmentin);
 	String Drugin=request.getParameter("Drug");
+	session.setAttribute("Drug", Drugin);
 	String Ingredientsin=request.getParameter("Ingredients");
+	session.setAttribute("Ingredients", Ingredientsin);
 	String Recordsin=request.getParameter("Records");
+	session.setAttribute("Records", Recordsin);
 	String Vetin=request.getParameter("Vet");
+	session.setAttribute("Vet", Vetin);
 	
-	if (Animalin!= null&&!Animalin.trim().equals("") && Animalin!= null&&!Animalin.trim().equals("")){
+/* 	if (Animalin!= null&&!Animalin.trim().equals("") && Animalin!= null&&!Animalin.trim().equals("")){
 		DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
 
 		for (Map.Entry<String, String[]> entry : Data.searchForAnimal(Animalin).entrySet()) {
-			%>
-			<p><%Arrays.toString(entry.getValue());%></p>
-			<%
+			System.out.println("Key: " + entry.getKey() + " Value: " + Arrays.toString(entry.getValue()));
+			session.setAttribute("animal", Animalin);
 		}
 	}
+	else if (Appointmentin!= null&&!Appointmentin.trim().equals("") && Appointmentin!= null&&!Appointmentin.trim().equals("")){
+		DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
+
+		for (Map.Entry<String, String[]> entry : Data.searchForAppointment(Appointmentin).entrySet()) {
+			System.out.println("Key: " + entry.getKey() + " Value: " + Arrays.toString(entry.getValue()));
+		}
+	} */
 	%> 
 <script>
 
 function toggleInputs(e){
     if(e.value!==''){
-        $('input[type="text"]:not(#'+e.id+')').prop('disabled', true); //disable 
+        $('input[type="text"]:not(#'+e.id+')').prop('disabled', true); //disable
     }
     else {
-        $('input[type="text"]').prop('disabled', false) //disable
+        $('input[type="text"]').prop('disabled', false) //enable
     }
 
  }
