@@ -214,26 +214,35 @@ public class DatabaseConnection{
 	
 	public Map<String, String[]> searchForAnimal (String animalID) throws SQLException {
 		String query = "SELECT * FROM FDA_Database.animal WHERE A_id = ?";
-		preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		preparedStatement.setString(1, animalID);
-		ResultSet set = preparedStatement.executeQuery();
-		set.last();
-		int maxRow = set.getRow();
-		if (maxRow > 0) {
-			Map<String, String[]> result = getHashMap(set, maxRow);
-			System.out.println(Arrays.toString(result.get("Reproductive_status")));
-			return result;
-		}
-		else {
-			System.out.println("null");
-			return null;
-		}
+		return search(animalID, query);
 	}
 	
 	public Map<String, String[]> searchForAppointment (String aptID) throws SQLException {
 		String query = "SELECT Apt_id, Date, appointment.V_id, name, username, title FROM fda_database.appointment natural join (SELECT vet.V_id, name, username, passwords, title FROM fda_database.vet natural join FDA_Database.or_vet_login join FDA_Database.login  join FDA_Database.organizations WHERE L_id = login.ID and organizations.Or_id = or_vet_login.Or_id) AS VET_INFO WHERE appointment.Apt_id = ?";
+		return search(aptID, query);
+	}
+
+	public Map<String, String[]> searchForDrug(String drugID) throws SQLException {
+		String query = "SELECT * FROM fda_database.drug natural join fda_database.ingredients natural join fda_database.drug_ingredient WHERE D_id = ?";
+		return search(drugID, query);
+	}
+	public Map<String, String[]> searchForIngredient (String inID) throws SQLException {
+		String query = "SELECT * FROM fda_database.ingredients natural join fda_database.drug_ingredient WHERE In_id = ?";
+		return search(inID, query);
+	}
+	
+	public Map<String,String[]> searchForRecord (String recID) throws SQLException {
+		String queryString = "SELECT fda_database.records.Rec_id, ows.Ow_id, ows.Name as OWNER_NAME, ows.Address AS OWNER_ADDRESS, fda_database.vet.V_id, fda_database.vet.Name AS VET_NAME FROM fda_database.records natural join fda_database.vet inner join fda_database.owners as ows on ows.Ow_id = fda_database.records.Ow_id WHERE Rec_id = ?";
+		return search(recID, queryString);
+	}
+	
+	public Map<String, String[]> searchForVet (String vetID) throws SQLException {
+		String query = "SELECT * FROM fda_database.vet natural join fda_database.appointment WHERE V_id = ?";
+		return search(vetID, query);
+	}
+	public Map<String, String[]> search (String id, String query) throws SQLException {
 		preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		preparedStatement.setString(1, aptID);
+		preparedStatement.setString(1, id);
 		ResultSet set = preparedStatement.executeQuery();
 		set.last();
 		int maxRow = set.getRow();
@@ -688,37 +697,16 @@ public class DatabaseConnection{
 		return true;
 	}
 	
-	/**
-	 * Run this as a java program to laod data into your database....
-	 * @param args
-	 */
-//	public static void main(String args[]) {
-//		DataCollector dataCollector = new DataCollector(new String[] {
-//				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
-//				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
-//		try {
-//			dataCollector.fetchSaveData();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
-//		System.out.println(connection.isConnectionAlive());
-//		try {
-//			connection.loadDatabase(dataCollector.getDowloadedData());
-//		} catch (SQLException | IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		connection.closeConnection();
-//	}
-//	
+//
 //	public static void main (String[] args) {
 //		DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
 //		try {
-//			System.out.println(connection.searchForAnimal("00013101-e668-4566").toString());
-//			System.out.println(connection.searchForAppointment("000330f8-1138-4590").toString());
-//
+//			connection.searchForAnimal("00013101-e668-4566");
+//			connection.searchForAppointment("000330f8-1138-4590");
+//			connection.searchForDrug("02e59f1f-35fc-4545");
+//			connection.searchForIngredient("0018f773-e8ca-445a");
+//			connection.searchForRecord("1610b538-16a3-4eb8");
+//			connection.searchForVet("0001481a-5d68-4016");
 //		} catch (SQLException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
