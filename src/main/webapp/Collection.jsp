@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Arrays"%>
+<%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
@@ -82,6 +81,7 @@
 	</form>
 	
 </div>
+
  <%
 	String Animalin=request.getParameter("Animal");
 	String Appointmentin=request.getParameter("Appointment");
@@ -92,18 +92,12 @@
 	
 	if (Animalin!= null&&!Animalin.trim().equals("") && Animalin!= null&&!Animalin.trim().equals("")){
 		DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-		HashMap<String, String[]> Hmap=Data.searchForAnimal(Animalin);
-		Hmap.forEach((key, value) ->
-        System.out.println("Key: " + key + " -> Value: " + Arrays.toString(value)));
-		// if(Hmap.isEmpty()) {
-		//	Data.closeConnection();
-			%><!-- <script type="text/javascript">alert("There is no data pertaining to that animal");</script> --><%
-		//	}
-		//else 
-		//	{
-		//	Data.closeConnection();
-			%><!-- <script type="text/javascript">alert("There is data");</script> --><%
-		// }
+
+		for (Map.Entry<String, String[]> entry : Data.searchForAnimal(Animalin).entrySet()) {
+			%>
+			<p><%Arrays.toString(entry.getValue());%></p>
+			<%
+		}
 	}
 	%> 
 <script>

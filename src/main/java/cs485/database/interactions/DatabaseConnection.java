@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -211,7 +212,7 @@ public class DatabaseConnection{
 		}
 	}
 	
-	public HashMap<String, String[]> searchForAnimal (String animalID) throws SQLException {
+	public Map<String, String[]> searchForAnimal (String animalID) throws SQLException {
 		String query = "SELECT * FROM FDA_Database.animal WHERE A_id = ?";
 		preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		preparedStatement.setString(1, animalID);
@@ -219,15 +220,17 @@ public class DatabaseConnection{
 		set.last();
 		int maxRow = set.getRow();
 		if (maxRow > 0) {
-			HashMap<String, String[]> result = getHashMap(set, maxRow);
+			Map<String, String[]> result = getHashMap(set, maxRow);
+			System.out.println(Arrays.toString(result.get("Reproductive_status")));
 			return result;
 		}
 		else {
+			System.out.println("null");
 			return null;
 		}
 	}
 	
-	public HashMap<String, String[]> searchForAppointment (String aptID) throws SQLException {
+	public Map<String, String[]> searchForAppointment (String aptID) throws SQLException {
 		String query = "SELECT Apt_id, Date, appointment.V_id, name, username, title FROM fda_database.appointment natural join (SELECT vet.V_id, name, username, passwords, title FROM fda_database.vet natural join FDA_Database.or_vet_login join FDA_Database.login  join FDA_Database.organizations WHERE L_id = login.ID and organizations.Or_id = or_vet_login.Or_id) AS VET_INFO WHERE appointment.Apt_id = ?";
 		preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		preparedStatement.setString(1, aptID);
@@ -235,7 +238,7 @@ public class DatabaseConnection{
 		set.last();
 		int maxRow = set.getRow();
 		if (maxRow > 0) {
-			HashMap<String, String[]> result = getHashMap(set, maxRow);
+			Map<String, String[]> result = getHashMap(set, maxRow);
 			return result;
 		}
 		else {
@@ -243,10 +246,11 @@ public class DatabaseConnection{
 		}
 	}
 	
-	public HashMap<String, String[]> getHashMap (ResultSet set, int maxRow) throws SQLException {
+	public Map<String, String[]> getHashMap (ResultSet set, int maxRow) throws SQLException {
 		HashMap<String, String[]> result = new HashMap<>();
 		String[] names = getColumnNames(set);
 		for (int i = 0; i < names.length; i ++) {
+			set.beforeFirst();
 			if (names[i] == null) {
 				continue;
 			}
@@ -256,6 +260,7 @@ public class DatabaseConnection{
 				current[counter] = set.getString(i+ 1);
 				counter++;
 			}
+			System.out.println(Arrays.toString(current));
 			result.put(names[i], current);
 		}
 		return result;
