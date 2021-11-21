@@ -4,6 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -41,14 +45,16 @@ else if (type.equals("F")){
 	String Vetin= session.getAttribute("Vet").toString();
 	entry = Data.searchForVet(Vetin);
 }
-out.println("<TABLE BORDER=1 ALIGN=CENTER>");
+out.println("<TABLE class='table table-striped' BORDER=1 ALIGN=CENTER>");
+out.println("<thead class='thead-dark'>");
 out.println("<TR>");
 Object[] keys = entry.keySet().toArray();
 for(String key: entry.keySet()){
-	out.println("<TH>"+ key + "</TH>");
+	out.println("<TH scope='col'>"+ key + "</TH>");
 }
 out.println("</TR>");
-int currentRow = 0;
+out.println("</thead>");
+out.println("<tbody>");
 for(int i = 0; i < entry.get((String)keys[0]).length; i++){
 	 out.println("<TR>" );
 	 for (int j = 0; j < entry.size(); j++) {
@@ -56,6 +62,7 @@ for(int i = 0; i < entry.get((String)keys[0]).length; i++){
 	 }
 	 out.println("</TR>" );
 }
+out.println("</tbody>");
 out.println("</TABLE>");
 /* out.println("<p>" + "Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue()) + "</p>\n");
 System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue())); */
