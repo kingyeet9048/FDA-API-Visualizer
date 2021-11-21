@@ -4,14 +4,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="tablecss.css">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Data Table</title>
 </head>
     <%@ page import="java.util.*"%>
     <%@ page import="java.io.*"%>
     <%@ page import="cs485.preprocessing.*"%>
     <%@ page import="cs485.database.interactions.*"%>
+    
+<div class="header">
+
+<div class="IDUSER">
+<p>Username: <% Object Password=session.getAttribute("name"); 
+		out.println(Password); %> </p>
+
+<p>Vet ID: <% Object ID=session.getAttribute("ID"); 
+		out.println(ID); %></p> 
+<a id="logout" onclick="logout()">LOGOUT</a>
+</div>
+<script type="text/javascript">function logout(){window.location.replace("index.jsp")}</script>
+<h1 class="title">DATA TABLE</h1>
+
+</div>
+
 <body>
+<div id="div1">
 <% 
 String type = session.getAttribute("type").toString();
 Map<String, String[]> entry = new HashMap<String, String[]>();
@@ -65,5 +83,7 @@ System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(e
 
 
 %>
+</div>
 </body>
+
 </html>
