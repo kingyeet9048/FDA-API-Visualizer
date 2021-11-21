@@ -66,22 +66,28 @@ else if (type.equals("F")){
 out.println("<TABLE class='table table-striped' BORDER=1 ALIGN=CENTER>");
 out.println("<thead class='thead-dark'>");
 out.println("<TR>");
-Object[] keys = entry.keySet().toArray();
-for(String key: entry.keySet()){
-	out.println("<TH scope='col'>"+ key + "</TH>");
+Object[] keys;
+if (entry == null) {
+	out.println("No data found for the given id");
 }
-out.println("</TR>");
-out.println("</thead>");
-out.println("<tbody>");
-for(int i = 0; i < entry.get((String)keys[0]).length; i++){
-	 out.println("<TR>" );
-	 for (int j = 0; j < entry.size(); j++) {
-		 out.println("<TD>" + entry.get((String)keys[j])[i] + "</TD>");
-	 }
-	 out.println("</TR>" );
+else {
+	keys = entry.keySet().toArray();
+	for(String key: entry.keySet()){
+		out.println("<TH scope='col'>"+ key + "</TH>");
+	}
+	out.println("</TR>");
+	out.println("</thead>");
+	out.println("<tbody>");
+	for(int i = 0; i < entry.get((String)keys[0]).length; i++){
+		 out.println("<TR>" );
+		 for (int j = 0; j < entry.size(); j++) {
+			 out.println("<TD>" + entry.get((String)keys[j])[i] + "</TD>");
+		 }
+		 out.println("</TR>" );
+	}
+	out.println("</tbody>");
+	out.println("</TABLE>");
 }
-out.println("</tbody>");
-out.println("</TABLE>");
 /* out.println("<p>" + "Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue()) + "</p>\n");
 System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue())); */
 // out.println("<TR BGCOLOR=\"#FFAD00\">\n" + "<TH colspan = '2' >Order Information");
