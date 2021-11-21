@@ -269,7 +269,7 @@ public class DatabaseConnection{
 				current[counter] = set.getString(i+ 1);
 				counter++;
 			}
-			System.out.println(Arrays.toString(current));
+			//System.out.println(Arrays.toString(current));
 			result.put(names[i], current);
 		}
 		return result;

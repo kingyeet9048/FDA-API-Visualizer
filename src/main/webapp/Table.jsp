@@ -1,3 +1,4 @@
+<%-- <%@page import="com.google.gson.internal.LinkedHashTreeMap.EntrySet"%> --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,74 +14,56 @@
 <body>
 <% 
 String type = session.getAttribute("type").toString();
-
+Map<String, String[]> entry = new HashMap<String, String[]>();
+DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
 if (type.equals("A")){
 	String Animalin= session.getAttribute("Animal").toString();
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-    for (Map.Entry<String, String[]> entry : Data.searchForAnimal(Animalin).entrySet()) {
-        %>
-            out.println("<p>" + entry.getKey() + "</p>\n");
-        <%
-    }
+    entry = Data.searchForAnimal(Animalin);
+
 }
 else if (type.equals("B")){
 	String Appointmentin= session.getAttribute("Appointment").toString();
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-    for (Map.Entry<String, String[]> entry : Data.searchForAppointment(Appointmentin).entrySet()) {
-        %>
-            <p><%entry.getKey();%></p>
-        <%
-    }
+	entry = Data.searchForAppointment(Appointmentin);
 }
 else if (type.equals("C")){
 	String Drugin= session.getAttribute("Drug").toString();
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-    for (Map.Entry<String, String[]> entry : Data.searchForDrug(Drugin).entrySet()) {
-        %>
-            <p><%entry.getKey();%></p>
-        <%
-    }
+	entry = Data.searchForDrug(Drugin);
 }
 else if (type.equals("D")){
-	String Recordsin= session.getAttribute("Records").toString();
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-    for (Map.Entry<String, String[]> entry : Data.searchForRecord(Recordsin).entrySet()) {
-        %>
-            <p><%entry.getKey();%></p>
-        <%
-    }
+	String Ingredientin= session.getAttribute("Ingredients").toString();
+	entry = Data.searchForIngredient(Ingredientin);
 }
 else if (type.equals("E")){
-	String Vetin= session.getAttribute("Vet").toString();
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-    for (Map.Entry<String, String[]> entry : Data.searchForVet(Vetin).entrySet()) {
-        %>
-            <p><%entry.getKey();%></p>
-        <%
-    }
+	String Recordsin= session.getAttribute("Records").toString();
+	entry = Data.searchForRecord(Recordsin);
 }
 else if (type.equals("F")){
-	String Ingredientin= session.getAttribute("Ingredients").toString();
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-    for (Map.Entry<String, String[]> entry : Data.searchForIngredient(Ingredientin).entrySet()) {
-        %>
-            <p><%entry.getKey();%></p>
-        <%
-    }
+	String Vetin= session.getAttribute("Vet").toString();
+	entry = Data.searchForVet(Vetin);
 }
+out.println("<TABLE BORDER=1 ALIGN=CENTER>");
+out.println("<TR>");
+Object[] keys = entry.keySet().toArray();
+for(String key: entry.keySet()){
+	out.println("<TH>"+ key + "</TH>");
+}
+out.println("</TR>");
+int currentRow = 0;
+for(int i = 0; i < entry.get((String)keys[0]).length; i++){
+	 out.println("<TR>" );
+	 for (int j = 0; j < entry.size(); j++) {
+		 out.println("<TD>" + entry.get((String)keys[j])[i] + "</TD>");
+	 }
+	 out.println("</TR>" );
+}
+out.println("</TABLE>");
+/* out.println("<p>" + "Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue()) + "</p>\n");
+System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue())); */
+// out.println("<TR BGCOLOR=\"#FFAD00\">\n" + "<TH colspan = '2' >Order Information");
+// <TD> <TR> <TH> <TD> out.println("<TD>" + paramName + "<TD>");
+//for(int i = 0; i < )
 
-/* else if (Appointmentin!= null&&!Appointmentin.trim().equals("") && Appointmentin!= null&&!Appointmentin.trim().equals("")){
-    DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
 
-    for (Map.Entry<String, String[]> entry : Data.searchForAppointment(Appointmentin).entrySet()) {
-        System.out.println("Key: " + entry.getKey() + " Value: " + Arrays.toString(entry.getValue()));
-    }
-} */
 %>
 </body>
 </html>

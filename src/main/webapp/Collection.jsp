@@ -89,64 +89,50 @@
 		String Ingredientsin=request.getParameter("Ingredients");
 		String Recordsin=request.getParameter("Records");
 		String Vetin=request.getParameter("Vet");
+		//A
 	if (Animalin != null && !Animalin.trim().equals("")) {
 		session.setAttribute("Animal", Animalin);
 		session.setAttribute("name", session.getAttribute("name"));
 		session.setAttribute("ID", session.getAttribute("ID"));
 		session.setAttribute("type", "A");
 		request.getRequestDispatcher("/Table.jsp").forward(request, response);
-	}
+	}//B
 	else if(Appointmentin != null && !Appointmentin.trim().equals("")){
 		session.setAttribute("Appointment", Appointmentin);
 		session.setAttribute("name", session.getAttribute("name"));
 		session.setAttribute("ID", session.getAttribute("ID"));
 		session.setAttribute("type", "B");
 		request.getRequestDispatcher("/Table.jsp").forward(request, response);
-	}
+	}//C
 	else if(Drugin != null && !Drugin.trim().equals("")){
 		session.setAttribute("Drug", Drugin);
 		session.setAttribute("name", session.getAttribute("name"));
 		session.setAttribute("ID", session.getAttribute("ID"));
 		session.setAttribute("type", "C");
 		request.getRequestDispatcher("/Table.jsp").forward(request, response);
-	}
+	}//D
 else if(Ingredientsin != null && !Ingredientsin.trim().equals("")){
-	session.setAttribute("Records", Recordsin);
+	session.setAttribute("Ingredients", Ingredientsin);
 	session.setAttribute("name", session.getAttribute("name"));
 	session.setAttribute("ID", session.getAttribute("ID"));
 	session.setAttribute("type", "D");
 	request.getRequestDispatcher("/Table.jsp").forward(request, response);
-	}
+	}//E
 else if(Recordsin != null && !Recordsin.trim().equals("")){
-	session.setAttribute("Vet", Vetin);
+	session.setAttribute("Records", Recordsin);
 	session.setAttribute("name", session.getAttribute("name"));
 	session.setAttribute("ID", session.getAttribute("ID"));
 	session.setAttribute("type", "E");
 	request.getRequestDispatcher("/Table.jsp").forward(request, response);
-}
+}//F
 else if(Vetin != null && !Vetin.trim().equals("")){
-	session.setAttribute("Ingredients", Ingredientsin);
+	session.setAttribute("Vet", Vetin);
 	session.setAttribute("name", session.getAttribute("name"));
 	session.setAttribute("ID", session.getAttribute("ID"));
 	session.setAttribute("type", "F");
 	request.getRequestDispatcher("/Table.jsp").forward(request, response);
 }
 	
-/* 	if (Animalin!= null&&!Animalin.trim().equals("") && Animalin!= null&&!Animalin.trim().equals("")){
-		DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-		for (Map.Entry<String, String[]> entry : Data.searchForAnimal(Animalin).entrySet()) {
-			System.out.println("Key: " + entry.getKey() + " Value: " + Arrays.toString(entry.getValue()));
-			session.setAttribute("animal", Animalin);
-		}
-	}
-	else if (Appointmentin!= null&&!Appointmentin.trim().equals("") && Appointmentin!= null&&!Appointmentin.trim().equals("")){
-		DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
-
-		for (Map.Entry<String, String[]> entry : Data.searchForAppointment(Appointmentin).entrySet()) {
-			System.out.println("Key: " + entry.getKey() + " Value: " + Arrays.toString(entry.getValue()));
-		}
-	} */
 	%> 
 <script>
 
