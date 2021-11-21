@@ -8,14 +8,32 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="tablecss.css">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Data Table</title>
 </head>
     <%@ page import="java.util.*"%>
     <%@ page import="java.io.*"%>
     <%@ page import="cs485.preprocessing.*"%>
     <%@ page import="cs485.database.interactions.*"%>
+    
+<div class="header">
+
+<div class="IDUSER">
+<p>Username: <% Object Password=session.getAttribute("name"); 
+		out.println(Password); %> </p>
+
+<p>Vet ID: <% Object ID=session.getAttribute("ID"); 
+		out.println(ID); %></p> 
+<a id="logout" onclick="logout()">LOGOUT</a>
+</div>
+<script type="text/javascript">function logout(){window.location.replace("index.jsp")}</script>
+<h1 class="title">DATA TABLE</h1>
+
+</div>
+
 <body>
+<div id="div1">
 <% 
 String type = session.getAttribute("type").toString();
 Map<String, String[]> entry = new HashMap<String, String[]>();
@@ -72,5 +90,7 @@ System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(e
 
 
 %>
+</div>
 </body>
+
 </html>
