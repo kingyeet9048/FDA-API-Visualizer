@@ -75,7 +75,7 @@
 		<p></p>
 		</div>
 		<div class="submit">
-			<input id ="submit" type="button" Value="SUBMIT" onclick="window.location.replace('Table.jsp')">
+			<input id ="submit" type="submit" Value="SUBMIT">
 			</div>
 	</div>
 	</form>
@@ -83,18 +83,54 @@
 </div>
 
  <%
-	String Animalin=request.getParameter("Animal");
- 	session.setAttribute("Animal", Animalin);
-	String Appointmentin=request.getParameter("Appointment");
-	session.setAttribute("Appointment", Appointmentin);
-	String Drugin=request.getParameter("Drug");
-	session.setAttribute("Drug", Drugin);
-	String Ingredientsin=request.getParameter("Ingredients");
-	session.setAttribute("Ingredients", Ingredientsin);
-	String Recordsin=request.getParameter("Records");
+ 		String Animalin=request.getParameter("Animal");
+		String Appointmentin=request.getParameter("Appointment");
+		String Drugin=request.getParameter("Drug");
+		String Ingredientsin=request.getParameter("Ingredients");
+		String Recordsin=request.getParameter("Records");
+		String Vetin=request.getParameter("Vet");
+	if (Animalin != null && !Animalin.trim().equals("")) {
+		session.setAttribute("Animal", Animalin);
+		session.setAttribute("name", session.getAttribute("name"));
+		session.setAttribute("ID", session.getAttribute("ID"));
+		session.setAttribute("type", "A");
+		request.getRequestDispatcher("/Table.jsp").forward(request, response);
+	}
+	else if(Appointmentin != null && !Appointmentin.trim().equals("")){
+		session.setAttribute("Appointment", Appointmentin);
+		session.setAttribute("name", session.getAttribute("name"));
+		session.setAttribute("ID", session.getAttribute("ID"));
+		session.setAttribute("type", "B");
+		request.getRequestDispatcher("/Table.jsp").forward(request, response);
+	}
+	else if(Drugin != null && !Drugin.trim().equals("")){
+		session.setAttribute("Drug", Drugin);
+		session.setAttribute("name", session.getAttribute("name"));
+		session.setAttribute("ID", session.getAttribute("ID"));
+		session.setAttribute("type", "C");
+		request.getRequestDispatcher("/Table.jsp").forward(request, response);
+	}
+else if(Ingredientsin != null && !Ingredientsin.trim().equals("")){
 	session.setAttribute("Records", Recordsin);
-	String Vetin=request.getParameter("Vet");
+	session.setAttribute("name", session.getAttribute("name"));
+	session.setAttribute("ID", session.getAttribute("ID"));
+	session.setAttribute("type", "D");
+	request.getRequestDispatcher("/Table.jsp").forward(request, response);
+	}
+else if(Recordsin != null && !Recordsin.trim().equals("")){
 	session.setAttribute("Vet", Vetin);
+	session.setAttribute("name", session.getAttribute("name"));
+	session.setAttribute("ID", session.getAttribute("ID"));
+	session.setAttribute("type", "E");
+	request.getRequestDispatcher("/Table.jsp").forward(request, response);
+}
+else if(Vetin != null && !Vetin.trim().equals("")){
+	session.setAttribute("Ingredients", Ingredientsin);
+	session.setAttribute("name", session.getAttribute("name"));
+	session.setAttribute("ID", session.getAttribute("ID"));
+	session.setAttribute("type", "F");
+	request.getRequestDispatcher("/Table.jsp").forward(request, response);
+}
 	
 /* 	if (Animalin!= null&&!Animalin.trim().equals("") && Animalin!= null&&!Animalin.trim().equals("")){
 		DatabaseConnection Data=new DatabaseConnection(request.getRealPath(".env"));
