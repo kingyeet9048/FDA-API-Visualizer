@@ -90,10 +90,12 @@ else {
 	out.println("</thead>");
 	out.println("<tbody>");
 	String lengths = "";
+	for(int i = 0; i < entry.keySet().size(); i++) {
+		lengths += entry.get((String)keys[0]).length + "#";
+	}
 	for(int i = 0; i < entry.get((String)keys[0]).length; i++){
 		 out.println("<TR>" );
 		 for (int j = 0; j < entry.size(); j++) {
-			 lengths += entry.get((String)keys[j]).length + "#";
 			 out.println("<TD>" + entry.get((String)keys[j])[i] + "</TD>");
 		 }
 		 out.println("</TR>" );
