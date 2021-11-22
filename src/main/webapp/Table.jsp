@@ -9,6 +9,9 @@
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="tablecss.css">
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 <meta charset="UTF-8">
 <title>Data Table</title>
 </head>
@@ -29,7 +32,11 @@
 <a id="logout" onclick="back()">BACK</a>
 </div>
 <script type="text/javascript">function logout(){window.location.replace("index.jsp")}</script>
-<script type="text/javascript">function back(){window.location.replace("Collection.jsp")}</script>
+<script type="text/javascript">
+
+function back(){window.location.replace("Collection.jsp")}
+
+</script>
 <h1 class="title">DATA TABLE</h1>
 
 </div>
@@ -74,21 +81,29 @@ if (entry == null) {
 }
 else {
 	keys = entry.keySet().toArray();
+	String headers = "";
 	for(String key: entry.keySet()){
 		out.println("<TH scope='col'>"+ key + "</TH>");
+		headers += key + "#";
 	}
 	out.println("</TR>");
 	out.println("</thead>");
 	out.println("<tbody>");
+	String lengths = "";
 	for(int i = 0; i < entry.get((String)keys[0]).length; i++){
 		 out.println("<TR>" );
 		 for (int j = 0; j < entry.size(); j++) {
+			 lengths += entry.get((String)keys[j]).length + "#";
 			 out.println("<TD>" + entry.get((String)keys[j])[i] + "</TD>");
 		 }
 		 out.println("</TR>" );
 	}
 	out.println("</tbody>");
 	out.println("</TABLE>");
+	out.println("<script type='text/javascript'>localStorage.setItem('headers','" +headers.substring(0, headers.length() - 1)+"')</script>");
+	out.println("<script type='text/javascript'>localStorage.setItem('lengths','" +lengths.substring(0, lengths.length() - 1)+"')</script>");
+	out.println("<canvas id='myChart' style='width:100%;max-width:700px'></canvas>");
+	out.println("<script type='text/javascript'>function random_rgba(numbers) {var colors = [];for (var i = 0; i < numbers; i++) {var o = Math.round, r = Math.random, s = 255;colors.push('rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')');	}return colors;}var xValues = localStorage.getItem('headers').split('#');var yValues = localStorage.getItem('lengths').split('#').map(function(item) {return parseInt(item, 10);});var colors = random_rgba(yValues.length);new Chart('myChart', {type: 'pie',data: {labels: xValues,datasets: [{backgroundColor: colors,data: yValues}]},options: {title: {display: true,text: 'FDA Chart'}}});</script>");
 }
 /* out.println("<p>" + "Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue()) + "</p>\n");
 System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue())); */
