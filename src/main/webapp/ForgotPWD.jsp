@@ -21,7 +21,7 @@
 	<div id="formC">
 	<form action="ForgotPWD.jsp" method="get">
 
-		User ID:<br>
+		Username:<br>
 		<input id="username" name="username" type="text" />
 		<br> 
 		Old Password:<br>
