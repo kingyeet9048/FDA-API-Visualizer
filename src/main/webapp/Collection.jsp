@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Collection</title>
   <script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
+   src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"
 ></script>
 </head>
 <body>
@@ -79,7 +79,7 @@
 			</div>
 	</div>
 	</form>
-	
+
 </div>
 
  <%

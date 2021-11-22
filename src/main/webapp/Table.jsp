@@ -25,9 +25,11 @@
 
 <p>Vet ID: <% Object ID=session.getAttribute("ID"); 
 		out.println(ID); %></p> 
-<a id="logout" onclick="logout()">LOGOUT</a>
+<a id="logout" onclick="logout()">LOGOUT</a> <%out.print("|"); %>
+<a id="logout" onclick="back()">BACK</a>
 </div>
 <script type="text/javascript">function logout(){window.location.replace("index.jsp")}</script>
+<script type="text/javascript">function back(){window.location.replace("Collection.jsp")}</script>
 <h1 class="title">DATA TABLE</h1>
 
 </div>
@@ -98,5 +100,4 @@ System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(e
 %>
 </div>
 </body>
-
 </html>
