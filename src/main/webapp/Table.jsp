@@ -104,7 +104,7 @@ else {
 	out.println("</TABLE>");
 	out.println("<script type='text/javascript'>localStorage.setItem('headers','" +headers.substring(0, headers.length() - 1)+"')</script>");
 	out.println("<script type='text/javascript'>localStorage.setItem('lengths','" +lengths.substring(0, lengths.length() - 1)+"')</script>");
-	out.println("<canvas id='myChart' style='width:100%;max-width:700px'></canvas>");
+	out.println("<div class='d-flex justify-content-center'><canvas id='myChart' style='width:100%;max-width:700px'></canvas></div>");
 	out.println("<script type='text/javascript'>function random_rgba(numbers) {var colors = [];for (var i = 0; i < numbers; i++) {var o = Math.round, r = Math.random, s = 255;colors.push('rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')');	}return colors;}var xValues = localStorage.getItem('headers').split('#');var yValues = localStorage.getItem('lengths').split('#').map(function(item) {return parseInt(item, 10);});var colors = random_rgba(yValues.length);new Chart('myChart', {type: 'pie',data: {labels: xValues,datasets: [{backgroundColor: colors,data: yValues}]},options: {title: {display: true,text: 'FDA Chart'}}});</script>");
 }
 /* out.println("<p>" + "Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue()) + "</p>\n");
