@@ -33,6 +33,8 @@
 			<input id ="login" type="submit" Value="LOGIN"/>
 			<br>
 			<input id ="change" type="button" Value="Change Password" onclick="window.location.replace('ForgotPWD.jsp')"/>
+			<input id ="change" type="button" Value="Activate Vet" onclick="window.location.replace('ActivateUser.jsp')"/>
+			
 
 	</form>
 		
