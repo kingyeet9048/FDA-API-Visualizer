@@ -135,7 +135,16 @@ else if(Vetin != null && !Vetin.trim().equals("")){
 	
 	%> 
 <script>
-
+// https://stackoverflow.com/questions/38799096/clear-input-fields-on-page-refresh-microsoft-edge
+window.onload = function() {
+	  document.getElementById('Animal').value = '';
+	  document.getElementById('Records').value = '';
+	  document.getElementById('Vet').value = '';
+	  document.getElementById('Ingredients').value = '';
+	  document.getElementById('Appointment').value = '';
+	  document.getElementById('Drug').value = '';
+	  }
+	  
 function toggleInputs(e){
     if(e.value!==''){
         $('input[type="text"]:not(#'+e.id+')').prop('disabled', true); //disable

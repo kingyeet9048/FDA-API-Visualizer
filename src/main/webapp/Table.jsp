@@ -1,4 +1,4 @@
-<%-- <%@page import="com.google.gson.internal.LinkedHashTreeMap.EntrySet"%> --%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -42,7 +42,7 @@ function back(){window.location.replace("Collection.jsp")}
 </div>
 
 <body>
-<div id="div1">
+
 <% 
 String type = session.getAttribute("type").toString();
 Map<String, String[]> entry = new HashMap<String, String[]>();
@@ -72,7 +72,7 @@ else if (type.equals("F")){
 	String Vetin= session.getAttribute("Vet").toString();
 	entry = Data.searchForVet(Vetin);
 }
-out.println("<TABLE class='table table-striped' BORDER=1 ALIGN=CENTER>");
+out.println("<TABLE id='shadow' class='w-auto table table-striped' BORDER=1 ALIGN=CENTER>");
 out.println("<thead class='thead-dark'>");
 out.println("<TR>");
 Object[] keys;
@@ -107,14 +107,9 @@ else {
 	out.println("<div class='d-flex justify-content-center'><canvas id='myChart' style='width:100%;max-width:700px'></canvas></div>");
 	out.println("<script type='text/javascript'>function random_rgba(numbers) {var colors = [];for (var i = 0; i < numbers; i++) {var o = Math.round, r = Math.random, s = 255;colors.push('rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')');	}return colors;}var xValues = localStorage.getItem('headers').split('#');var yValues = localStorage.getItem('lengths').split('#').map(function(item) {return parseInt(item, 10);});var colors = random_rgba(yValues.length);new Chart('myChart', {type: 'pie',data: {labels: xValues,datasets: [{backgroundColor: colors,data: yValues}]},options: {title: {display: true,text: 'FDA Chart'}}});</script>");
 }
-/* out.println("<p>" + "Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue()) + "</p>\n");
-System.out.println("Key: " + entry1.getKey() + " -> Value: " + Arrays.toString(entry1.getValue())); */
-// out.println("<TR BGCOLOR=\"#FFAD00\">\n" + "<TH colspan = '2' >Order Information");
-// <TD> <TR> <TH> <TD> out.println("<TD>" + paramName + "<TD>");
-//for(int i = 0; i < )
 
 
 %>
-</div>
+
 </body>
 </html>

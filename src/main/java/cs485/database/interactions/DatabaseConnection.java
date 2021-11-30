@@ -983,40 +983,40 @@ public class DatabaseConnection{
 	 * Run this main to get options for using this object. 
 	 * @param args
 	 */
-	public static void main (String[] args) {
-		Scanner scanner  = new Scanner(System.in);
-		while (true) {
-			System.out.print("Please enter one of the following options to. To load the db, enter 1.\nTo exit, press 2\n");
-			String input = scanner.nextLine();
-			if (input.equals("1")) {
-				// start the db connect and get the data collector object. 
-				DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
-				DataCollector dataCollector = new DataCollector(new String[] {
-				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
-				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
-				try {
-					// collector object has fetched the info, add it to the db now
-					connection.loadDatabase(dataCollector.fetchSaveData());
-					// search for these ids, these ids will probably not be in your ids
-					// so it should return null
-					System.out.println(connection.searchForAnimal("00013101-e668-4566"));
-					System.out.println(connection.searchForAppointment("000330f8-1138-4590"));
-					System.out.println(connection.searchForDrug("02e59f1f-35fc-4545"));
-					System.out.println(connection.searchForIngredient("0018f773-e8ca-445a"));
-					System.out.println(connection.searchForRecord("1610b538-16a3-4eb8"));
-					System.out.println(connection.searchForVet("0001481a-5d68-4016"));
-					connection.closeConnection();
-				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			}
-			else if (input.equals("2")) {
-				break;
-			}
-		}
-		scanner.close();
-	}
+//	public static void main (String[] args) {
+//		Scanner scanner  = new Scanner(System.in);
+//		while (true) {
+//			System.out.print("Please enter one of the following options to. To load the db, enter 1.\nTo exit, press 2\n");
+//			String input = scanner.nextLine();
+//			if (input.equals("1")) {
+//				// start the db connect and get the data collector object. 
+//				DatabaseConnection connection = new DatabaseConnection("src/main/webapp/.env");
+//				DataCollector dataCollector = new DataCollector(new String[] {
+//				"https://download.open.fda.gov/animalandveterinary/event/2021q1/animalandveterinary-event-0001-of-0001.json.zip",
+//				"https://download.open.fda.gov/animalandveterinary/event/2021q2/animalandveterinary-event-0001-of-0001.json.zip" });
+//				try {
+//					// collector object has fetched the info, add it to the db now
+//					connection.loadDatabase(dataCollector.fetchSaveData());
+//					// search for these ids, these ids will probably not be in your ids
+//					// so it should return null
+//					System.out.println(connection.searchForAnimal("00013101-e668-4566"));
+//					System.out.println(connection.searchForAppointment("000330f8-1138-4590"));
+//					System.out.println(connection.searchForDrug("02e59f1f-35fc-4545"));
+//					System.out.println(connection.searchForIngredient("0018f773-e8ca-445a"));
+//					System.out.println(connection.searchForRecord("1610b538-16a3-4eb8"));
+//					System.out.println(connection.searchForVet("0001481a-5d68-4016"));
+//					connection.closeConnection();
+//				} catch (SQLException | IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				break;
+//			}
+//			else if (input.equals("2")) {
+//				break;
+//			}
+//		}
+//		scanner.close();
+//	}
 
 }
