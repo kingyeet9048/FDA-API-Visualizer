@@ -25,7 +25,7 @@
 		<input id="vetid" name="vetid" type="text" />
 		<br> 
 
-		<input id ="back" type="button" Value="Back" onclick="window.location.replace('index.jsp')"/>
+		<input id ="back" type="submit" Value="Back"/>
 
 	</form>
 	<%

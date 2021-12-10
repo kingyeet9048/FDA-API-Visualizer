@@ -25,10 +25,10 @@
 		<input id="username" name="username" type="text" />
 		<br> 
 		Old Password:<br>
-		<input id="OldPWD" name="OldPassword" type="text" />
+		<input id="OldPWD" name="OldPassword" type="password" />
 		<br> 
 		New Password:<br>
-		<input id="NewPWD" name="NewPassword" type="text" />
+		<input id="NewPWD" name="NewPassword" type="password" />
 		<br> 
 		<br>
 		<input id ="reset" type="submit" Value="Reset Password"/>

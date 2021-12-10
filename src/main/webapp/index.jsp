@@ -28,7 +28,7 @@
 		Username: <br>
 		<input id="username" name="username" type="text" /><br> 
 		Password: <br>
-		<input id="password" name="password" type="text" /><br> 
+		<input id="password" name="password" type="password" /><br> 
 		<br> 
 			<input id ="login" type="submit" Value="LOGIN"/>
 			<br>
