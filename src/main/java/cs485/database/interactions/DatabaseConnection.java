@@ -891,6 +891,9 @@ public class DatabaseConnection{
 		System.out.println("Adding Records...");
 		// for each owner, add the owners records. Randomly associated
 		for (String owner : addedOwnerID) {
+			if (counter  > vet.length) {
+				break;
+			}
 			preparedStatement = connection.prepareStatement(insertLogin);
 			String id = getNewID(recordID);
 			preparedStatement.setString(1, id);
