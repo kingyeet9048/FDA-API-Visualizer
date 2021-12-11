@@ -6,6 +6,10 @@
 
 <html>
 <head>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="collectcss.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Collection</title>
@@ -26,7 +30,7 @@
 <a id="logout" onclick="logout()">LOGOUT</a>
 </div>
 
-<h1 class="title">DATA COLLECTION</h1>
+<h1 class="title">Visualize Data</h1>
 
 </div>
 <script type="text/javascript">function logout(){window.location.replace("index.jsp")}</script>
@@ -34,46 +38,22 @@
 	<%@ page import="java.io.*"%>
 	<%@ page import="cs485.preprocessing.*"%>
 	<%@ page import="cs485.database.interactions.*"%>
-	
-
+		
 	<div id="div1">
+	
+	<h2 class="d-flex justify-content-center mb-1">Please select an attribute to search by and enter an id</h2>
+
 	<form action="Collection.jsp" method="get">
 	<div id="grid">
-	
-		<div class="input">
-		Animal: <br>
-		<input id="Animal" name="Animal" type="text" onkeyup="toggleInputs(this)"/>
-		</div>
-		
-		<div class="input">
-		Appointment: <br>
-		<input id="Appointment" name="Appointment" type="text" onkeyup="toggleInputs(this)"/>
-		</div>
-		
-		
-		<div class="input">
-		Drug: <br>
-		<input id="Drug" name="Drug" type="text" onkeyup="toggleInputs(this)"/>
-		</div>
-		
-		<div class="input">
-		Ingredients: <br>
-		<input id="Ingredients" name="Ingredients" type="text" onkeyup="toggleInputs(this)"/>
-		</div>
-
-		
-		<div class="input">
-		Records: <br>
-		<input id="Records" name="Records" type="text" onkeyup="toggleInputs(this)"/>
-		</div>
-		
-		<div class="input">
-		Vet: <br>
-		<input id="Vet" name="Vet" type="text" onkeyup="toggleInputs(this)"/>
-		</div>
-		<div class="input">
-		<p></p>
-		</div>
+		<select class="form-select mb-1" name="Search_Attributes" id="Attributes">
+		  <option value="Animal">Animal</option>
+		  <option value="Appointment">Appointment</option>
+		  <option value="Ingredients">Ingredients</option>
+		  <option value="Drug">Drug</option>
+		  <option value="Records">Records</option>
+		  <option value="Vet">Vet</option>
+		</select>
+		<input type="text" id="id" name="id" placeholder="XXX-XXX-XXX" required>
 		<div class="submit">
 			<input id ="submit" type="submit" Value="SUBMIT">
 			</div>
@@ -83,50 +63,46 @@
 </div>
 
  <%
- 		String Animalin=request.getParameter("Animal");
-		String Appointmentin=request.getParameter("Appointment");
-		String Drugin=request.getParameter("Drug");
-		String Ingredientsin=request.getParameter("Ingredients");
-		String Recordsin=request.getParameter("Records");
-		String Vetin=request.getParameter("Vet");
+ 		String search_attribute=request.getParameter("Search_Attributes");
+		String id=request.getParameter("id");
 		//A
-	if (Animalin != null && !Animalin.trim().equals("")) {
-		session.setAttribute("Animal", Animalin);
+	if (search_attribute != null && !search_attribute.trim().equals("") && search_attribute.equals("Animal")) {
+		session.setAttribute("Animal", id);
 		session.setAttribute("name", session.getAttribute("name"));
 		session.setAttribute("ID", session.getAttribute("ID"));
 		session.setAttribute("type", "A");
 		request.getRequestDispatcher("/Table.jsp").forward(request, response);
 	}//B
-	else if(Appointmentin != null && !Appointmentin.trim().equals("")){
-		session.setAttribute("Appointment", Appointmentin);
+	else if(search_attribute != null && !search_attribute.trim().equals("") && search_attribute.equals("Appointment")){
+		session.setAttribute("Appointment", id);
 		session.setAttribute("name", session.getAttribute("name"));
 		session.setAttribute("ID", session.getAttribute("ID"));
 		session.setAttribute("type", "B");
 		request.getRequestDispatcher("/Table.jsp").forward(request, response);
 	}//C
-	else if(Drugin != null && !Drugin.trim().equals("")){
-		session.setAttribute("Drug", Drugin);
+	else if(search_attribute != null && !search_attribute.trim().equals("") && search_attribute.equals("Drug")){
+		session.setAttribute("Drug", id);
 		session.setAttribute("name", session.getAttribute("name"));
 		session.setAttribute("ID", session.getAttribute("ID"));
 		session.setAttribute("type", "C");
 		request.getRequestDispatcher("/Table.jsp").forward(request, response);
 	}//D
-else if(Ingredientsin != null && !Ingredientsin.trim().equals("")){
-	session.setAttribute("Ingredients", Ingredientsin);
+else if(search_attribute != null && !search_attribute.trim().equals("") && search_attribute.equals("Ingredients")){
+	session.setAttribute("Ingredients", id);
 	session.setAttribute("name", session.getAttribute("name"));
 	session.setAttribute("ID", session.getAttribute("ID"));
 	session.setAttribute("type", "D");
 	request.getRequestDispatcher("/Table.jsp").forward(request, response);
 	}//E
-else if(Recordsin != null && !Recordsin.trim().equals("")){
-	session.setAttribute("Records", Recordsin);
+else if(search_attribute != null && !search_attribute.trim().equals("") && search_attribute.equals("Records")){
+	session.setAttribute("Records", id);
 	session.setAttribute("name", session.getAttribute("name"));
 	session.setAttribute("ID", session.getAttribute("ID"));
 	session.setAttribute("type", "E");
 	request.getRequestDispatcher("/Table.jsp").forward(request, response);
 }//F
-else if(Vetin != null && !Vetin.trim().equals("")){
-	session.setAttribute("Vet", Vetin);
+else if(search_attribute != null && !search_attribute.trim().equals("") && search_attribute.equals("Vet")){
+	session.setAttribute("Vet", id);
 	session.setAttribute("name", session.getAttribute("name"));
 	session.setAttribute("ID", session.getAttribute("ID"));
 	session.setAttribute("type", "F");

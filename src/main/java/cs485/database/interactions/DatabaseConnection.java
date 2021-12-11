@@ -501,13 +501,8 @@ public class DatabaseConnection{
 		String insertDrugIngredients = "INSERT INTO FDA_Database.Drug_ingredient VALUES (?, ?)";
 		String insertExposure = "INSERT INTO FDA_Database.Exposure VALUES (?, ?, ?)";
 
-		int counter = 0; 
 		// iterate through all the drugs
 		for (Drug drug : drugs) {
-			// limitor on the number of drugs added. 
-			if (counter > 10) {
-				break;
-			}
 			// check to see if the atc vet code is contained within the list
 			// if it is, continue, aready processed it. 
 			if (addedVetCode.contains(drug.getAtcVetCode())) {
@@ -549,7 +544,6 @@ public class DatabaseConnection{
 			// add the drug to the list of added drugs. 
 			addedVetCode.add(drug.getAtcVetCode());
 			addedDrugIds.add(drugId);
-			counter++;
 		}
 		
 	}
@@ -587,13 +581,8 @@ public class DatabaseConnection{
 		// make query
 		String insertOwner = "INSERT INTO FDA_Database.Owners VALUES (?, ?, ?)";
 		int counter = 0;
-		int namesCounter = 0;
 		// for each name added, add the name as a new owner and give that new owne an address.
 		for (String name : names) {
-			// limitor on the number of owners
-			if (namesCounter > 10) {
-				break;
-			}
 			preparedStatement = connection.prepareStatement(insertOwner);
 			String id = getNewID(addedOwnerID);
 			preparedStatement.setString(1, id);
@@ -607,7 +596,6 @@ public class DatabaseConnection{
 			preparedStatement.executeUpdate();
 			counter++;
 			addedOwnerID.add(id);
-			namesCounter++;
 		}
 	}
 	
@@ -658,12 +646,7 @@ public class DatabaseConnection{
 			line = vetReader.readLine();
 		}
 		
-		int vetCount = 0;
 		for (String vet : vet) {
-			// limitor on number of vets added.
-			if (vetCount > 10) {
-				break;
-			}
 			String insertVet = "INSERT INTO FDA_Database.Vet VALUES (?, ?)";
 			
 			preparedStatement = connection.prepareStatement(insertVet);
@@ -672,7 +655,6 @@ public class DatabaseConnection{
 			preparedStatement.setString(2, vet);
 			preparedStatement.executeUpdate();
 			addedVetID.add(id);
-			vetCount++;
 		}
 		vetReader.close();
 	}
@@ -912,9 +894,6 @@ public class DatabaseConnection{
 			preparedStatement = connection.prepareStatement(insertLogin);
 			String id = getNewID(recordID);
 			preparedStatement.setString(1, id);
-			if (counter >= addedVetID.size()) {
-				counter = 0;
-			}
 			preparedStatement.setString(2, addedVetID.get(counter));
 			preparedStatement.setString(3, owner);
 			preparedStatement.executeUpdate();
@@ -955,11 +934,7 @@ public class DatabaseConnection{
 		addLogin();
 		for (Map.Entry<String, List<Visit>> mapEntry : map.entrySet()) {
 			List<Visit> values = mapEntry.getValue();
-			int counter = 0;
 			for (Visit visit : values) {
-				if (counter > 5) {
-					break;
-				}
 				addAppointment(visit);
 				addAppointmentOUt(visit);
 				if (visit.getReceiver() != null) {
@@ -969,7 +944,6 @@ public class DatabaseConnection{
 				if (visit.getAnimal() != null) {
 					addAnimal(visit.getAnimal());
 				}
-				counter++;
 			}
 		}
 		addVetCred();
